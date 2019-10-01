@@ -1,35 +1,49 @@
 package model;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class Budget {
+public class Budget implements Loadable, Saveable {
     public ArrayList<IncomeItem> allIncomeItems = new ArrayList<IncomeItem>();
     public ArrayList<ExpenseItem> allExpenseItems = new ArrayList<ExpenseItem>();
+    // TODO: Change this
+    public ArrayList<Item> allItems = new ArrayList<Item>();
     public ArrayList<SubBudget> allSubBudgets = new ArrayList<SubBudget>();
     public Scanner scanner = new Scanner(System.in);
     public ArrayList<String> incomeCategories = new ArrayList<String>();
 
     public void run() {
-        while (true) {
+        load("income.txt");
+        boolean keepRunning = true;
+        while (keepRunning) {
             displayChoices();
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            if (choice == 1) {
-                createIncomeItem();
-            } else if (choice == 3) {
-                displayIncomeItems();
-            } else if (choice == 5) {
-                editIncomeItem();
-            } else if (choice == 7) {
-                createSubBudget();
-            } else if (choice == 8) {
-                viewSubBudgets();
-            } else {
-                break;
-            }
+            keepRunning = runAppropriateFunctionBasedOnChoice(choice);
         }
+    }
+
+    private boolean runAppropriateFunctionBasedOnChoice(int choice) {
+        if (choice == 1) {
+            createIncomeItem();
+        } else if (choice == 3) {
+            displayIncomeItems();
+        } else if (choice == 5) {
+            editIncomeItem();
+        } else if (choice == 7) {
+            createSubBudget();
+        } else if (choice == 8) {
+            viewSubBudgets();
+        } else {
+            save(null, "income.txt");
+            return false;
+        }
+        return true;
     }
 
     private void createPresetIncomeCategories() {
@@ -49,7 +63,7 @@ public class Budget {
         System.out.println("[6] Edit an expense item (not currently implemented)");
         System.out.println("[7] Create a monthly sub-budget to track money spent on individual categories");
         System.out.println("[8] View sub-budgets");
-        System.out.println("[other] Exit");
+        System.out.println("[other] Save and quit");
     }
 
     public void createIncomeItem() {
@@ -62,7 +76,10 @@ public class Budget {
         String date = scanner.nextLine();
         System.out.println("Any additional info? (Enter a note)");
         String note = scanner.nextLine();
-        allIncomeItems.add(new IncomeItem(amount, category, date, note));
+        // TODO: Change this
+        Item i = new IncomeItem(amount, category, date, note);
+        allItems.add(i);
+        allIncomeItems.add((IncomeItem) i);
         System.out.println("Income item has been successfully created.");
     }
 
@@ -133,5 +150,42 @@ public class Budget {
             System.out.print(" of " + b.getAmount() + " (" + b.getAmountLeft(allIncomeItems) + " left in sub-budget)");
             System.out.println();
         }
+    }
+
+    @Override
+    public List<String> load(String file) {
+        System.out.println("Attempting to load previous session...");
+        List<String> lines = null;
+
+        try {
+            lines = Files.readAllLines(Paths.get("./data/" + file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Loading completed.");
+
+        return lines;
+    }
+
+    @Override
+    public void save(ArrayList<String> content, String file) {
+        System.out.println("Attempting to save this session...");
+
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("./data/" + file, "UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        for (String i : content) {
+            writer.println(i);
+        }
+        writer.close();
+
+        System.out.println("Saving completed.");
     }
 }

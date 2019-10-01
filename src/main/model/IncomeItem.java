@@ -1,6 +1,6 @@
 package model;
 
-public class IncomeItem {
+public class IncomeItem implements Item {
     private double amount;
     private String category;
     private String date;
