@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
-    private ArrayList<IncomeItem> allIncomeItems = new ArrayList<IncomeItem>();
-    private ArrayList<ExpenseItem> allExpenseItems = new ArrayList<ExpenseItem>();
+    private ArrayList<Item> allIncomeItems = new ArrayList<Item>();
+    private ArrayList<Item> allExpenseItems = new ArrayList<Item>();
     private ArrayList<SubBudget> allSubBudgets = new ArrayList<SubBudget>();
     private Scanner scanner = new Scanner(System.in);
 
-    public Menu(ArrayList<IncomeItem> allIncomeItems, ArrayList<ExpenseItem> allExpenseItems,
+    public Menu(ArrayList<Item> allIncomeItems, ArrayList<Item> allExpenseItems,
                 ArrayList<SubBudget> allSubBudgets) {
         this.allIncomeItems = allIncomeItems;
         this.allExpenseItems = allExpenseItems;
@@ -37,12 +37,12 @@ public class Menu {
         int currentMonth = LocalDate.now().getMonthValue();
         double totalMonthlyIncome = 0.0;
         double totalMonthlyExpenses = 0.0;
-        for (IncomeItem i : allIncomeItems) {
+        for (Item i : allIncomeItems) {
             if (i.getDate().getYear() == currentYear && i.getDate().getMonthValue() == currentMonth) {
                 totalMonthlyIncome += i.getAmount();
             }
         }
-        for (ExpenseItem e : allExpenseItems) {
+        for (Item e : allExpenseItems) {
             if (e.getDate().getYear() == currentYear && e.getDate().getMonthValue() == currentMonth) {
                 totalMonthlyExpenses += e.getAmount();
             }
@@ -51,6 +51,23 @@ public class Menu {
         System.out.println("Total expenses this month: " + totalMonthlyExpenses);
         System.out.println("Net income this month: " + (totalMonthlyIncome - totalMonthlyExpenses));
         System.out.println("--------------------");
+    }
+
+    public boolean runAppropriateFunctionBasedOnChoice(int choice) {
+        if (choice == 1) {
+            createItem();
+        } else if (choice == 2) {
+            displayAllItems();
+        } else if (choice == 3) {
+            editItem();
+        } else if (choice == 4) {
+            createSubBudget();
+        } else if (choice == 5) {
+            viewSubBudgets();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     public void createItem() {
@@ -110,7 +127,7 @@ public class Menu {
 
     private void displayIncomeItems() {
         int counter = 0;
-        for (IncomeItem i : allIncomeItems) {
+        for (Item i : allIncomeItems) {
             System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategory() + " on ");
             System.out.println(i.getDate() + " with note: " + i.getNote());
             counter++;
@@ -119,7 +136,7 @@ public class Menu {
 
     private void displayExpenseItems() {
         int counter = 0;
-        for (ExpenseItem i : allExpenseItems) {
+        for (Item i : allExpenseItems) {
             System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategory() + " on ");
             System.out.println(i.getDate() + " with note: " + i.getNote());
             counter++;
@@ -133,20 +150,20 @@ public class Menu {
         int choice = scanner.nextInt();
         scanner.nextLine();
         if (choice == 1) {
-            editIncomeItem();
+            displayIncomeItems();
+            editItem(allIncomeItems);
         } else {
             displayExpenseItems();
-            createItemGetValues("expense");
+            editItem(allExpenseItems);
         }
     }
 
-    private void editIncomeItem() {
-        displayIncomeItems();
+    private void editItem(ArrayList<Item> items) {
         System.out.println("Which item would you like to change? (Enter the item number)");
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        if (choice < allIncomeItems.size()) {
+        if (choice < items.size()) {
             System.out.println("What would you like to change?");
             System.out.println("[1] Amount");
             System.out.println("[2] Category");
@@ -156,14 +173,14 @@ public class Menu {
             scanner.nextLine();
 
             if (fieldChoice >= 1 && fieldChoice <= 4) {
-                editCorrectIncomeItemField(allIncomeItems.get(choice), fieldChoice);
+                editCorrectItemField(items.get(choice), fieldChoice);
             }
         } else {
             System.out.println("That's an invalid item!");
         }
     }
 
-    private void editCorrectIncomeItemField(IncomeItem item, int fieldChoice) {
+    private void editCorrectItemField(Item item, int fieldChoice) {
         System.out.println("Enter new value:");
         if (fieldChoice == 1) {
             double newAmount = scanner.nextDouble();

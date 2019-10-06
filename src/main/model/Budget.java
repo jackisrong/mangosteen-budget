@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Budget implements Loadable, Saveable {
-    private ArrayList<IncomeItem> allIncomeItems = new ArrayList<IncomeItem>();
-    private ArrayList<ExpenseItem> allExpenseItems = new ArrayList<ExpenseItem>();
+    private ArrayList<Item> allIncomeItems = new ArrayList<Item>();
+    private ArrayList<Item> allExpenseItems = new ArrayList<Item>();
     private ArrayList<SubBudget> allSubBudgets = new ArrayList<SubBudget>();
     private Scanner scanner = new Scanner(System.in);
     private Menu menu = new Menu(allIncomeItems, allExpenseItems, allSubBudgets);
@@ -25,52 +25,34 @@ public class Budget implements Loadable, Saveable {
             menu.displayChoices();
             int choice = scanner.nextInt();
             scanner.nextLine();
-            keepRunning = runAppropriateFunctionBasedOnChoice(choice);
+            keepRunning = menu.runAppropriateFunctionBasedOnChoice(choice);
         }
-    }
-
-    private boolean runAppropriateFunctionBasedOnChoice(int choice) {
-        if (choice == 1) {
-            menu.createItem();
-        } else if (choice == 2) {
-            menu.displayAllItems();
-        } else if (choice == 3) {
-            menu.editItem();
-        } else if (choice == 4) {
-            menu.createSubBudget();
-        } else if (choice == 5) {
-            menu.viewSubBudgets();
-        } else {
-            saveAllExistingData();
-            return false;
-        }
-        return true;
+        saveAllExistingData();
     }
 
     @Override
     // Code used from example load function project on EdX deliverable 4 page
-    public List<String> load(String file) {
+    public List<String> load(String file) throws IOException {
         List<String> lines = null;
+        return Files.readAllLines(Paths.get("./data/" + file));
+    }
 
+    public boolean loadAllExistingData() {
+        System.out.println("Attempting to load previous session...");
         try {
-            lines = Files.readAllLines(Paths.get("./data/" + file));
+            allIncomeItems = parseItemFiles(load("incomeItems.txt"));
+            allExpenseItems = parseItemFiles(load("expenseItems.txt"));
+            allSubBudgets = parseSubBudgetFile(load("subBudgets.txt"));
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return lines;
-    }
-
-    private void loadAllExistingData() {
-        System.out.println("Attempting to load previous session...");
-        allIncomeItems = parseIncomeExpenseItemsFiles(load("incomeItems.txt"));
-        load("expenseItems.txt");
-        load("subBudgets.txt");
         System.out.println("Loading completed.");
+        return true;
     }
 
-    private ArrayList parseIncomeExpenseItemsFiles(List<String> content) {
-        ArrayList parsedData = new ArrayList();
+    public ArrayList<Item> parseItemFiles(List<String> content) {
+        ArrayList<Item> parsedData = new ArrayList<Item>();
         for (int i = 0; i < content.size(); i++) {
             String rawLine = content.get(i);
             String[] splitLine = rawLine.split(",");
@@ -84,17 +66,25 @@ public class Budget implements Loadable, Saveable {
         return parsedData;
     }
 
+    public ArrayList<SubBudget> parseSubBudgetFile(List<String> content) {
+        ArrayList<SubBudget> parsedData = new ArrayList<SubBudget>();
+        for (int i = 0; i < content.size(); i++) {
+            String rawLine = content.get(i);
+            String[] splitLine = rawLine.split(",");
+            String category = splitLine[0];
+            double amount = Double.parseDouble(splitLine[1]);
+            parsedData.add(new SubBudget(category, amount));
+        }
+
+        return parsedData;
+    }
+
     @Override
     // Code used from example save function project on EdX deliverable 4 page
-    public void save(ArrayList<String> content, String file) {
+    public void save(ArrayList<String> content, String file)
+            throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = null;
-        try {
-            writer = new PrintWriter("./data/" + file, "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        writer = new PrintWriter("./data/" + file, "UTF-8");
 
         for (String i : content) {
             writer.println(i);
@@ -102,18 +92,32 @@ public class Budget implements Loadable, Saveable {
         writer.close();
     }
 
-    private void saveAllExistingData() {
+    public boolean saveAllExistingData() {
         System.out.println("Attempting to save this session...");
-        save(parseIncomeItemsForSave(), "incomeItems.txt");
-        save(null, "expenseItems.txt");
-        save(null, "subBudgets.txt");
+        try {
+            save(parseItemsForSave(allIncomeItems), "incomeItems.txt");
+            save(parseItemsForSave(allExpenseItems), "expenseItems.txt");
+            save(parseSubBudgetsForSave(allSubBudgets), "subBudgets.txt");
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
         System.out.println("Saving completed.");
+        return true;
     }
 
-    private ArrayList<String> parseIncomeItemsForSave() {
+    public ArrayList<String> parseItemsForSave(ArrayList<Item> items) {
         ArrayList<String> parsedData = new ArrayList<String>();
-        for (IncomeItem i : allIncomeItems) {
+        for (Item i : items) {
             parsedData.add(i.getAmount() + "," + i.getCategory() + "," + i.getDate() + "," + i.getNote());
+        }
+        return parsedData;
+    }
+
+    public ArrayList<String> parseSubBudgetsForSave(ArrayList<SubBudget> items) {
+        ArrayList<String> parsedData = new ArrayList<String>();
+        for (SubBudget i : items) {
+            parsedData.add(i.getCategory() + "," + i.getAmount());
         }
         return parsedData;
     }

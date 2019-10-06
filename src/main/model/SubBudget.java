@@ -23,10 +23,10 @@ public class SubBudget {
     }
 
     // EFFECTS: returns total amount of expenses in category TODO: in this month
-    public double getAmountUsed(ArrayList<IncomeItem> allIncomeItems) {
+    public double getAmountUsed(ArrayList<Item> allIncomeItems) {
         double amountAdder = 0;
         if (allIncomeItems != null) {
-            for (IncomeItem i : allIncomeItems) {
+            for (Item i : allIncomeItems) {
                 // TODO: check if expenses are in the current month
                 if (i.getCategory().equals(category)) {
                     amountAdder += i.getAmount();
@@ -38,7 +38,7 @@ public class SubBudget {
     }
 
     // EFFECTS: returns amount of money left to spend in category to say in budget TODO: in this month
-    public double getAmountLeft(ArrayList<IncomeItem> allIncomeItems) {
+    public double getAmountLeft(ArrayList<Item> allIncomeItems) {
         return amount - getAmountUsed(allIncomeItems);
     }
 }

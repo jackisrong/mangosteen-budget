@@ -27,7 +27,7 @@ public class IncomeItemTest {
 
     @Test
     public void getDateTest() {
-        assertEquals("2019-09-25", item.getDate());
+        assertEquals(LocalDate.of(2019, 9, 25), item.getDate());
     }
 
     @Test
@@ -55,11 +55,11 @@ public class IncomeItemTest {
 
     @Test
     public void changeDateTest() {
-        assertEquals("2019-09-25", item.getDate());
+        assertEquals(LocalDate.of(2019, 9, 25), item.getDate());
         item.changeDate(LocalDate.of(2019, 9, 5));
-        assertEquals("2019-09-05", item.getDate());
+        assertEquals(LocalDate.of(2019, 9, 5), item.getDate());
         item.changeDate(LocalDate.of(2019, 9, 7));
-        assertEquals("2019-09-07", item.getDate());
+        assertEquals(LocalDate.of(2019, 9, 7), item.getDate());
     }
 
     @Test
