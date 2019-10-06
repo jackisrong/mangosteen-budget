@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IncomeItemTest {
@@ -10,7 +12,7 @@ public class IncomeItemTest {
 
     @BeforeEach
     public void setup() {
-        item = new IncomeItem(100, "Job", "2019-09-25", "");
+        item = new IncomeItem(100, "Job", LocalDate.of(2019, 9, 25), "");
     }
 
     @Test
@@ -54,9 +56,9 @@ public class IncomeItemTest {
     @Test
     public void changeDateTest() {
         assertEquals("2019-09-25", item.getDate());
-        item.changeDate("2019-09-05");
+        item.changeDate(LocalDate.of(2019, 9, 5));
         assertEquals("2019-09-05", item.getDate());
-        item.changeDate("2019-09-07");
+        item.changeDate(LocalDate.of(2019, 9, 7));
         assertEquals("2019-09-07", item.getDate());
     }
 

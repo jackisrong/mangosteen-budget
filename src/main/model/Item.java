@@ -1,21 +1,64 @@
 package model;
 
-public interface Item {
-    // TODO: Change this into a superclass for deliverable 5.
+import java.time.LocalDate;
 
-    public double getAmount();
+public abstract class Item {
+    protected double amount;
+    protected String category;
+    protected LocalDate date;
+    protected String note;
 
-    public String getCategory();
+    public Item(double amount, String category, LocalDate date, String note) {
+        this.amount = amount;
+        this.category = category;
+        this.date = date;
+        this.note = note;
+    }
 
-    public String getDate();
+    // EFFECTS: returns amount of item
+    public double getAmount() {
+        return amount;
+    }
 
-    public String getNote();
+    // EFFECTS: returns category of item
+    public String getCategory() {
+        return category;
+    }
 
-    public void changeAmount(double newAmount);
+    // EFFECTS: returns date of item
+    public LocalDate getDate() {
+        return date;
+    }
 
-    public void changeCategory(String newCategory);
+    // EFFECTS: returns note of item
+    public String getNote() {
+        return note;
+    }
 
-    public void changeDate(String newDate);
+    // REQUIRES: valid monetary amount newAmount
+    // MODIFIES: this
+    // EFFECTS: changes the item amount to newAmount
+    public void changeAmount(double newAmount) {
+        amount = newAmount;
+    }
 
-    public void changeNote(String newNote);
+    // MODIFIES: this
+    // EFFECTS: changes the item category to newCategory
+    public void changeCategory(String newCategory) {
+        category = newCategory;
+    }
+
+    // TODO: change date to use an actual date system rather than a String
+    // REQUIRES: valid date newDate
+    // MODIFIES: this
+    // EFFECTS: changes the item date to newDate
+    public void changeDate(LocalDate newDate) {
+        date = newDate;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: changes the item note to newNote
+    public void changeNote(String newNote) {
+        note = newNote;
+    }
 }
