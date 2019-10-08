@@ -29,6 +29,7 @@ public class Menu {
         System.out.println("[3] Edit an income or expense item");
         System.out.println("[4] Create a monthly sub-budget to track money spent on individual categories");
         System.out.println("[5] View sub-budgets");
+        System.out.println("[6] Edit a sub-budget's amount");
         System.out.println("[other] Save and quit");
     }
 
@@ -64,6 +65,8 @@ public class Menu {
             createSubBudget();
         } else if (choice == 5) {
             viewSubBudgets();
+        } else if (choice == 6) {
+            changeSubBudgetAmount();
         } else {
             return false;
         }
@@ -207,7 +210,7 @@ public class Menu {
         return LocalDate.of(year, month, day);
     }
 
-    public void createSubBudget() {
+    private void createSubBudget() {
         System.out.println("Which category would you like to create a sub-budget for?");
         String category = scanner.nextLine();
         System.out.println("What amount would you like to set the budget for?");
@@ -216,11 +219,26 @@ public class Menu {
         allSubBudgets.add(new SubBudget(category, amount));
     }
 
-    public void viewSubBudgets() {
+    private void viewSubBudgets() {
         for (SubBudget b : allSubBudgets) {
-            System.out.print("Sub-budget for " + b.getCategory() + " has used " + b.getAmountUsed(allIncomeItems));
-            System.out.print(" of " + b.getAmount() + " (" + b.getAmountLeft(allIncomeItems) + " left in sub-budget)");
-            System.out.println();
+            System.out.println("Sub-budget for " + b.getCategory() + " has used "
+                    + b.getAmountUsedThisMonth(allExpenseItems, LocalDate.now()) + " of " + b.getAmount() + " ("
+                    + b.getAmountLeft(allExpenseItems, LocalDate.now()) + " left in sub-budget)");
+        }
+    }
+
+    private void changeSubBudgetAmount() {
+        viewSubBudgets();
+        System.out.println("Which category's sub-budget would you like to edit?");
+        String category = scanner.nextLine();
+        for (SubBudget s : allSubBudgets) {
+            if (s.getCategory().equals(category)) {
+                System.out.println("Enter new amount for sub-budget:");
+                double newAmount = scanner.nextDouble();
+                scanner.nextLine();
+                s.changeAmount(newAmount);
+                break;
+            }
         }
     }
 }

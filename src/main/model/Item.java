@@ -8,7 +8,7 @@ public abstract class Item {
     protected LocalDate date;
     protected String note;
 
-    public Item(double amount, String category, LocalDate date, String note) {
+    protected Item(double amount, String category, LocalDate date, String note) {
         this.amount = amount;
         this.category = category;
         this.date = date;
@@ -35,7 +35,7 @@ public abstract class Item {
         return note;
     }
 
-    // REQUIRES: valid monetary amount newAmount
+    // REQUIRES: valid monetary amount newAmount > 0.0
     // MODIFIES: this
     // EFFECTS: changes the item amount to newAmount
     public void changeAmount(double newAmount) {
@@ -48,8 +48,6 @@ public abstract class Item {
         category = newCategory;
     }
 
-    // TODO: change date to use an actual date system rather than a String
-    // REQUIRES: valid date newDate
     // MODIFIES: this
     // EFFECTS: changes the item date to newDate
     public void changeDate(LocalDate newDate) {
@@ -61,4 +59,31 @@ public abstract class Item {
     public void changeNote(String newNote) {
         note = newNote;
     }
+
+    // MODIFIES: this
+    // EFFECTS: changes the item amount to newAmount, category to newCategory
+    public void changeItemDetails(double newAmount, String newCategory) {
+        amount = newAmount;
+        category = newCategory;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: changes the item amount to newAmount, category to newCategory, date to newDate
+    public void changeItemDetails(double newAmount, String newCategory, LocalDate newDate) {
+        amount = newAmount;
+        category = newCategory;
+        date = newDate;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: changes the item amount to newAmount, category to newCategory, date to newDate, note to newNote
+    public void changeItemDetails(double newAmount, String newCategory, LocalDate newDate, String newNote) {
+        amount = newAmount;
+        category = newCategory;
+        date = newDate;
+        note = newNote;
+    }
+
+    // EFFECTS: prints a user-friendly sentence of item details
+    public abstract void viewItem();
 }

@@ -1,0 +1,11 @@
+Salary
+Investments
+Rentals
+Gifts
+Awards
+Grants
+Sales
+Refunds
+Coupons
+Lottery
+Others

@@ -14,4 +14,10 @@ public class IncomeItem extends Item {
         incomeCategories.add("Investments");
         incomeCategories.add("Gift");
     }
+
+    @Override
+    public void viewItem() {
+        System.out.println("Income of amount " + amount + " in category " + category + " from date " + date
+                + "with note: " + note);
+    }
 }
