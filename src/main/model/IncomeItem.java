@@ -16,8 +16,8 @@ public class IncomeItem extends Item {
     }
 
     @Override
-    public void viewItem() {
-        System.out.println("Income of amount " + amount + " in category " + category + " from date " + date
-                + "with note: " + note);
+    public String viewItem() {
+        return "Income of amount $" + amount + " in category " + category + " from date " + date
+                + " with note: " + note;
     }
 }

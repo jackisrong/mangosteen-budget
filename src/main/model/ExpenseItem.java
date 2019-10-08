@@ -12,8 +12,8 @@ public class ExpenseItem extends Item {
     }
 
     @Override
-    public void viewItem() {
-        System.out.println("Expense of amount " + amount + " in category " + category + " from date " + date
-                + "with note: " + note);
+    public String viewItem() {
+        return "Expense of amount $" + amount + " in category " + category + " from date " + date
+                + " with note: " + note;
     }
 }

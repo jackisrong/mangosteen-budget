@@ -85,5 +85,5 @@ public abstract class Item {
     }
 
     // EFFECTS: prints a user-friendly sentence of item details
-    public abstract void viewItem();
+    public abstract String viewItem();
 }
