@@ -19,6 +19,33 @@ public class BudgetTest {
     }
 
     @Test
+    public void getAddToAllIncomeItemsTest() {
+        assertEquals(0, budget.getAllIncomeItems().size());
+        budget.addToAllIncomeItems(new IncomeItem(500, "Salary", LocalDate.of(2019, 10, 9), ""));
+        budget.addToAllIncomeItems(new IncomeItem(5.99, "Refund", LocalDate.of(2019, 10, 12), ""));
+        budget.addToAllIncomeItems(new IncomeItem(200, "Investments", LocalDate.of(2019, 10, 25), ""));
+        budget.addToAllIncomeItems(new IncomeItem(25, "Gift", LocalDate.of(2019, 10, 30), ""));
+        assertEquals(4, budget.getAllIncomeItems().size());
+    }
+
+    @Test
+    public void getAddToAllExpenseItemsTest() {
+        assertEquals(0, budget.getAllExpenseItems().size());
+        budget.addToAllExpenseItems(new ExpenseItem(76.78, "Food", LocalDate.of(2019, 10, 9), ""));
+        budget.addToAllExpenseItems(new ExpenseItem(30, "Gifts", LocalDate.of(2019, 10, 12), ""));
+        budget.addToAllExpenseItems(new ExpenseItem(10.99, "Entertainment", LocalDate.of(2019, 10, 15), ""));
+        assertEquals(3, budget.getAllExpenseItems().size());
+    }
+
+    @Test
+    public void getAddToAllSubBudgetsTest() {
+        assertEquals(0, budget.getAllSubBudgets().size());
+        budget.addToAllSubBudgets(new SubBudget("Food", 300));
+        budget.addToAllSubBudgets(new SubBudget("Entertainment", 100));
+        assertEquals(2, budget.getAllSubBudgets().size());
+    }
+
+    @Test
     public void saveLoadTestWithEmptyFile() throws IOException {
         ArrayList<String> saveContent = new ArrayList<String>();
         budget.save(saveContent, "loadSaveTest.txt");
@@ -100,7 +127,7 @@ public class BudgetTest {
     @Test
     public void parseItemsForSaveTest() {
         ArrayList<Item> items = new ArrayList<Item>();
-        items.add(new IncomeItem(100.0, "Salary", LocalDate.of(2019, 10, 06), "hello test"));
+        items.add(new IncomeItem(100.0, "Salary", LocalDate.of(2019, 10, 6), "hello test"));
         items.add(new IncomeItem(1789.0, "Investments", LocalDate.of(2019, 10, 16), "Microsoft"));
         items.add(new IncomeItem(9.99, "Gift", LocalDate.of(2019, 10, 27), "gift from mom"));
 

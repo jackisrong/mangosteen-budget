@@ -1,33 +1,39 @@
 package model;
 
-import ui.Menu;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Budget implements Loadable, Saveable {
     private ArrayList<Item> allIncomeItems = new ArrayList<Item>();
     private ArrayList<Item> allExpenseItems = new ArrayList<Item>();
     private ArrayList<SubBudget> allSubBudgets = new ArrayList<SubBudget>();
-    private Scanner scanner = new Scanner(System.in);
-    private Menu menu = new Menu(allIncomeItems, allExpenseItems, allSubBudgets);
 
-    public void run() {
-        loadAllExistingData();
-        menu.displayMonthlyView();
-        boolean keepRunning = true;
-        while (keepRunning) {
-            menu.displayChoices();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            keepRunning = menu.runAppropriateFunctionBasedOnChoice(choice);
-        }
-        saveAllExistingData();
+    public ArrayList<Item> getAllIncomeItems() {
+        return allIncomeItems;
+    }
+
+    public ArrayList<Item> getAllExpenseItems() {
+        return allExpenseItems;
+    }
+
+    public ArrayList<SubBudget> getAllSubBudgets() {
+        return allSubBudgets;
+    }
+
+    public void addToAllIncomeItems(Item i) {
+        allIncomeItems.add(i);
+    }
+
+    public void addToAllExpenseItems(Item i) {
+        allExpenseItems.add(i);
+    }
+
+    public void addToAllSubBudgets(SubBudget s) {
+        allSubBudgets.add(s);
     }
 
     @Override
@@ -53,8 +59,7 @@ public class Budget implements Loadable, Saveable {
 
     public ArrayList<Item> parseItemFiles(List<String> content) {
         ArrayList<Item> parsedData = new ArrayList<Item>();
-        for (int i = 0; i < content.size(); i++) {
-            String rawLine = content.get(i);
+        for (String rawLine : content) {
             String[] splitLine = rawLine.split(",");
             double amount = Double.parseDouble(splitLine[0]);
             String category = splitLine[1];
@@ -68,8 +73,7 @@ public class Budget implements Loadable, Saveable {
 
     public ArrayList<SubBudget> parseSubBudgetFile(List<String> content) {
         ArrayList<SubBudget> parsedData = new ArrayList<SubBudget>();
-        for (int i = 0; i < content.size(); i++) {
-            String rawLine = content.get(i);
+        for (String rawLine : content) {
             String[] splitLine = rawLine.split(",");
             String category = splitLine[0];
             double amount = Double.parseDouble(splitLine[1]);
@@ -83,8 +87,7 @@ public class Budget implements Loadable, Saveable {
     // Code used from example save function project on EdX deliverable 4 page
     public void save(ArrayList<String> content, String file)
             throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = null;
-        writer = new PrintWriter("./data/" + file, "UTF-8");
+        PrintWriter writer = new PrintWriter("./data/" + file, "UTF-8");
 
         for (String i : content) {
             writer.println(i);
