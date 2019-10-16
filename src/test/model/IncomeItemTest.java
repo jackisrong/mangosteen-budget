@@ -1,17 +1,19 @@
 package model;
 
+import exceptions.NegativeMonetaryAmountException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class IncomeItemTest {
     private IncomeItem item;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws NegativeMonetaryAmountException {
         item = new IncomeItem(100, "Job", LocalDate.of(2019, 9, 25), "");
     }
 
@@ -38,9 +40,23 @@ public class IncomeItemTest {
     @Test
     public void changeAmountTest() {
         assertEquals(100, item.getAmount());
-        item.changeAmount(200);
+        try {
+            item.changeAmount(200);
+        } catch (NegativeMonetaryAmountException e) {
+            fail();
+        }
         assertEquals(200, item.getAmount());
-        item.changeAmount(161.87);
+        try {
+            item.changeAmount(161.87);
+        } catch (NegativeMonetaryAmountException e) {
+            fail();
+        }
+        assertEquals(161.87, item.getAmount());
+        try {
+            item.changeAmount(-502.2);
+            fail();
+        } catch (NegativeMonetaryAmountException e) {
+        }
         assertEquals(161.87, item.getAmount());
     }
 

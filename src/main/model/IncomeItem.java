@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.InvalidMonetaryAmountException;
+import exceptions.NegativeMonetaryAmountException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -7,7 +10,8 @@ public class IncomeItem extends Item {
     public ArrayList<String> incomeCategories = new ArrayList<String>();
 
     // EFFECTS: creates new IncomeItem with specified fields
-    public IncomeItem(double amount, String category, LocalDate date, String note) {
+    public IncomeItem(double amount, String category, LocalDate date, String note)
+            throws NegativeMonetaryAmountException {
         super(amount, category, date, note);
         incomeCategories.add("Salary");
         incomeCategories.add("Rentals");

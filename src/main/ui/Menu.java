@@ -1,5 +1,7 @@
 package ui;
 
+import exceptions.InvalidMonetaryAmountException;
+import exceptions.NegativeMonetaryAmountException;
 import model.*;
 
 import java.time.LocalDate;
@@ -110,13 +112,23 @@ public class Menu {
     }
 
     private void createIncomeItem(double amount, String category, LocalDate date, String note) {
-        budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
-        System.out.println("Income item has been successfully created.");
+        try {
+            budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+        } catch (NegativeMonetaryAmountException e) {
+            System.out.println("Invalid monetary amount!  Your amount is negative!");
+        } finally {
+            System.out.println("Income item creation process has finished.");
+        }
     }
 
     private void createExpenseItem(double amount, String category, LocalDate date, String note) {
-        budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
-        System.out.println("Expense item has been successfully created.");
+        try {
+            budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+        } catch (NegativeMonetaryAmountException e) {
+            System.out.println("Invalid monetary amount!  Your amount is negative!");
+        } finally {
+            System.out.println("Expense item creation process has finished.");
+        }
     }
 
     private void displayAllItems() {
@@ -189,7 +201,11 @@ public class Menu {
         if (fieldChoice == 1) {
             double newAmount = scanner.nextDouble();
             scanner.nextLine();
-            item.changeAmount(newAmount);
+            try {
+                item.changeAmount(newAmount);
+            } catch (NegativeMonetaryAmountException e) {
+                System.out.println("Invalid monetary amount!  Your amount is negative!");
+            }
         } else if (fieldChoice == 2) {
             String newCategory = scanner.nextLine();
             item.changeCategory(newCategory);
@@ -199,7 +215,6 @@ public class Menu {
             String newNote = scanner.nextLine();
             item.changeNote(newNote);
         }
-        System.out.println("Change successful");
     }
 
     private LocalDate changeDate() {

@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.NegativeMonetaryAmountException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ public class ExpenseItemTest {
     private ExpenseItem item;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws NegativeMonetaryAmountException {
         item = new ExpenseItem(51.29, "Food", LocalDate.of(2019, 9, 20), "hello");
     }
 

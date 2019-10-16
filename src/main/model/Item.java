@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.InvalidMonetaryAmountException;
+import exceptions.NegativeMonetaryAmountException;
+
 import java.time.LocalDate;
 
 public abstract class Item {
@@ -8,11 +11,21 @@ public abstract class Item {
     protected LocalDate date;
     protected String note;
 
-    protected Item(double amount, String category, LocalDate date, String note) {
-        this.amount = amount;
+    protected Item(double amount, String category, LocalDate date, String note) throws NegativeMonetaryAmountException {
+        if (checkMonetaryValidity(amount)) {
+            this.amount = amount;
+        }
         this.category = category;
         this.date = date;
         this.note = note;
+    }
+
+    private boolean checkMonetaryValidity(double a) throws NegativeMonetaryAmountException {
+        if (a < 0) {
+            throw new NegativeMonetaryAmountException();
+        }
+
+        return true;
     }
 
     // EFFECTS: returns amount of item
@@ -38,8 +51,10 @@ public abstract class Item {
     // REQUIRES: valid monetary amount newAmount > 0.0
     // MODIFIES: this
     // EFFECTS: changes the item amount to newAmount
-    public void changeAmount(double newAmount) {
-        amount = newAmount;
+    public void changeAmount(double newAmount) throws NegativeMonetaryAmountException {
+        if (checkMonetaryValidity(newAmount)) {
+            amount = newAmount;
+        }
     }
 
     // MODIFIES: this
@@ -57,30 +72,6 @@ public abstract class Item {
     // MODIFIES: this
     // EFFECTS: changes the item note to newNote
     public void changeNote(String newNote) {
-        note = newNote;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: changes the item amount to newAmount, category to newCategory
-    public void changeItemDetails(double newAmount, String newCategory) {
-        amount = newAmount;
-        category = newCategory;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: changes the item amount to newAmount, category to newCategory, date to newDate
-    public void changeItemDetails(double newAmount, String newCategory, LocalDate newDate) {
-        amount = newAmount;
-        category = newCategory;
-        date = newDate;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: changes the item amount to newAmount, category to newCategory, date to newDate, note to newNote
-    public void changeItemDetails(double newAmount, String newCategory, LocalDate newDate, String newNote) {
-        amount = newAmount;
-        category = newCategory;
-        date = newDate;
         note = newNote;
     }
 

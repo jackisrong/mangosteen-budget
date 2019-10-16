@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.NegativeMonetaryAmountException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class BudgetTest {
     }
 
     @Test
-    public void getAddToAllIncomeItemsTest() {
+    public void getAddToAllIncomeItemsTest() throws NegativeMonetaryAmountException {
         assertEquals(0, budget.getAllIncomeItems().size());
         budget.addToAllIncomeItems(new IncomeItem(500, "Salary", LocalDate.of(2019, 10, 9), ""));
         budget.addToAllIncomeItems(new IncomeItem(5.99, "Refund", LocalDate.of(2019, 10, 12), ""));
@@ -29,7 +30,7 @@ public class BudgetTest {
     }
 
     @Test
-    public void getAddToAllExpenseItemsTest() {
+    public void getAddToAllExpenseItemsTest() throws NegativeMonetaryAmountException {
         assertEquals(0, budget.getAllExpenseItems().size());
         budget.addToAllExpenseItems(new ExpenseItem(76.78, "Food", LocalDate.of(2019, 10, 9), ""));
         budget.addToAllExpenseItems(new ExpenseItem(30, "Gifts", LocalDate.of(2019, 10, 12), ""));
@@ -125,7 +126,7 @@ public class BudgetTest {
     }
 
     @Test
-    public void parseItemsForSaveTest() {
+    public void parseItemsForSaveTest() throws NegativeMonetaryAmountException {
         ArrayList<Item> items = new ArrayList<Item>();
         items.add(new IncomeItem(100.0, "Salary", LocalDate.of(2019, 10, 6), "hello test"));
         items.add(new IncomeItem(1789.0, "Investments", LocalDate.of(2019, 10, 16), "Microsoft"));

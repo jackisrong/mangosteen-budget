@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.NegativeMonetaryAmountException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,21 +40,23 @@ public class Budget implements Loadable, Saveable {
 
     @Override
     // Code used from example load function project on EdX deliverable 4 page
-    public List<String> load(String file) throws IOException {
+    public List<String> load(String file) {
         List<String> lines = null;
-        return Files.readAllLines(Paths.get("./data/" + file));
+        try {
+            lines = Files.readAllLines(Paths.get("./data/" + file));
+        } catch (IOException e) {
+            System.out.println("Failed to load data from " + file);
+        }
+        return lines;
     }
 
     public boolean loadAllExistingData() {
         System.out.println("Attempting to load previous session...");
-        try {
-            allIncomeItems = parseItemFiles(load("incomeItems.txt"));
-            allExpenseItems = parseItemFiles(load("expenseItems.txt"));
-            allSubBudgets = parseSubBudgetFile(load("subBudgets.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+
+        allIncomeItems = parseItemFiles(load("incomeItems.txt"));
+        allExpenseItems = parseItemFiles(load("expenseItems.txt"));
+        allSubBudgets = parseSubBudgetFile(load("subBudgets.txt"));
+
         System.out.println("Loading completed.");
         return true;
     }
@@ -65,7 +69,11 @@ public class Budget implements Loadable, Saveable {
             String category = splitLine[1];
             LocalDate date = LocalDate.parse(splitLine[2]);
             String note = splitLine[3];
-            parsedData.add(new IncomeItem(amount, category, date, note));
+            try {
+                parsedData.add(new IncomeItem(amount, category, date, note));
+            } catch (NegativeMonetaryAmountException e) {
+                System.out.println("Error in parsing saved date. Monetary amount of an item is negative.");
+            }
         }
 
         return parsedData;
@@ -85,9 +93,15 @@ public class Budget implements Loadable, Saveable {
 
     @Override
     // Code used from example save function project on EdX deliverable 4 page
-    public void save(ArrayList<String> content, String file)
-            throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("./data/" + file, "UTF-8");
+    public void save(ArrayList<String> content, String file) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("./data/" + file, "UTF-8");
+        } catch (FileNotFoundException e) {
+            System.out.println("Failed to save to " + file + ". File does not exist.");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Failed to save to " + file + ". Unsupported encoding.");
+        }
 
         for (String i : content) {
             writer.println(i);
@@ -97,14 +111,11 @@ public class Budget implements Loadable, Saveable {
 
     public boolean saveAllExistingData() {
         System.out.println("Attempting to save this session...");
-        try {
-            save(parseItemsForSave(allIncomeItems), "incomeItems.txt");
-            save(parseItemsForSave(allExpenseItems), "expenseItems.txt");
-            save(parseSubBudgetsForSave(allSubBudgets), "subBudgets.txt");
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return false;
-        }
+
+        save(parseItemsForSave(allIncomeItems), "incomeItems.txt");
+        save(parseItemsForSave(allExpenseItems), "expenseItems.txt");
+        save(parseSubBudgetsForSave(allSubBudgets), "subBudgets.txt");
+
         System.out.println("Saving completed.");
         return true;
     }
