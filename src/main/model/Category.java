@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public abstract class Category {
     protected ArrayList<String> categories = new ArrayList<String>();
+    protected ArrayList<Item> itemsInCategory = new ArrayList<Item>();
 
     // MODIFIES: this
     // EFFECTS: adds category with name into categories list if does not already exist

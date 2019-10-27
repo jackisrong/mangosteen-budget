@@ -88,7 +88,7 @@ public class BudgetTest {
 
     @Test
     public void parseItemFilesTest() throws IOException {
-        ArrayList<Item> parsed = budget.parseItemFiles(budget.load("incomeItemsTest.txt"));
+        ArrayList<Item> parsed = budget.parseItemFiles(budget.load("incomeItemsTest.txt"), "income");
         assertEquals(3, parsed.size());
 
         assertEquals(500.99, parsed.get(0).getAmount());

@@ -1,6 +1,5 @@
 package ui;
 
-import exceptions.InvalidMonetaryAmountException;
 import exceptions.NegativeMonetaryAmountException;
 import model.*;
 
