@@ -14,7 +14,7 @@ public class IncomeItemTest {
 
     @BeforeEach
     public void setup() throws NegativeMonetaryAmountException {
-        item = new IncomeItem(100, "Job", LocalDate.of(2019, 9, 25), "");
+        item = new IncomeItem(100, new IncomeCategory("Salary"), LocalDate.of(2019, 9, 25), "");
     }
 
     @Test
@@ -24,7 +24,12 @@ public class IncomeItemTest {
 
     @Test
     public void getCategoryTest() {
-        assertEquals("Job", item.getCategory());
+        assertEquals(new IncomeCategory("Salary"), item.getCategory());
+    }
+
+    @Test
+    public void getCategoryNameTest() {
+        assertEquals("Salary", item.getCategoryName());
     }
 
     @Test
@@ -62,11 +67,11 @@ public class IncomeItemTest {
 
     @Test
     public void changeCategoryTest() {
-        assertEquals("Job", item.getCategory());
-        item.changeCategory("Gift");
-        assertEquals("Gift", item.getCategory());
-        item.changeCategory("Investments");
-        assertEquals("Investments", item.getCategory());
+        assertEquals(new IncomeCategory("Salary"), item.getCategory());
+        item.changeCategory(new IncomeCategory("Gift"));
+        assertEquals(new IncomeCategory("Gift"), item.getCategory());
+        item.changeCategory(new IncomeCategory("Investments"));
+        assertEquals(new IncomeCategory("Investments"), item.getCategory());
     }
 
     @Test
@@ -89,6 +94,6 @@ public class IncomeItemTest {
 
     @Test
     public void viewItemTest() {
-        assertEquals("Income of amount $100.0 in category Job from date 2019-09-25 with note: ", item.viewItem());
+        assertEquals("Income of amount $100.0 in category Salary from date 2019-09-25 with note: ", item.viewItem());
     }
 }

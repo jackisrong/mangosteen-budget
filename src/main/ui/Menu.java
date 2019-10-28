@@ -32,6 +32,7 @@ public class Menu {
         System.out.println("[4] Create a monthly sub-budget to track money spent on individual categories");
         System.out.println("[5] View sub-budgets");
         System.out.println("[6] Edit a sub-budget's amount");
+        System.out.println("[7] FOR TESTING ONLY: View all items in each category");
         System.out.println("[other] Save and quit");
     }
 
@@ -62,13 +63,15 @@ public class Menu {
         } else if (choice == 2) {
             displayAllItems();
         } else if (choice == 3) {
-            editItem();
+            editItemChooseType();
         } else if (choice == 4) {
             createSubBudget();
         } else if (choice == 5) {
             viewSubBudgets();
         } else if (choice == 6) {
             changeSubBudgetAmount();
+        } else if (choice == 7) {
+            viewAllItemsInAllCategories();
         } else {
             return false;
         }
@@ -93,7 +96,7 @@ public class Menu {
         double amount = scanner.nextDouble();
         scanner.nextLine();
         System.out.println("Where is your " + type + " from? (Enter a category)");
-        String category = scanner.nextLine();
+        String categoryKey = scanner.nextLine();
         System.out.println("When is your " + type + " from? (Enter a date in format YYYY MM DD)");
         int year = scanner.nextInt();
         int month = scanner.nextInt();
@@ -104,13 +107,13 @@ public class Menu {
         String note = scanner.nextLine();
 
         if (type.equals("income")) {
-            createIncomeItem(amount, category, date, note);
+            createIncomeItem(amount, budget.getIncomeCategories().get(categoryKey), date, note);
         } else {
-            createExpenseItem(amount, category, date, note);
+            createExpenseItem(amount, budget.getExpenseCategories().get(categoryKey), date, note);
         }
     }
 
-    private void createIncomeItem(double amount, String category, LocalDate date, String note) {
+    private void createIncomeItem(double amount, Category category, LocalDate date, String note) {
         try {
             budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
         } catch (NegativeMonetaryAmountException e) {
@@ -120,7 +123,7 @@ public class Menu {
         }
     }
 
-    private void createExpenseItem(double amount, String category, LocalDate date, String note) {
+    private void createExpenseItem(double amount, Category category, LocalDate date, String note) {
         try {
             budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
         } catch (NegativeMonetaryAmountException e) {
@@ -133,47 +136,38 @@ public class Menu {
     private void displayAllItems() {
         System.out.println("--------------------");
         System.out.println("Income Items");
-        displayIncomeItems();
+        displayAllItemsInList(budget.getAllIncomeItems());
         System.out.println("--------------------");
         System.out.println("Expense Items");
-        displayExpenseItems();
+        displayAllItemsInList(budget.getAllExpenseItems());
         System.out.println("--------------------");
     }
 
-    private void displayIncomeItems() {
+    private void displayAllItemsInList(ArrayList<Item> items) {
         int counter = 0;
-        for (Item i : budget.getAllIncomeItems()) {
-            System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategory() + " on ");
+        for (Item i : items) {
+            System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategoryName() + " on ");
             System.out.println(i.getDate() + " with note: " + i.getNote());
             counter++;
         }
     }
 
-    private void displayExpenseItems() {
-        int counter = 0;
-        for (Item i : budget.getAllExpenseItems()) {
-            System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategory() + " on ");
-            System.out.println(i.getDate() + " with note: " + i.getNote());
-            counter++;
-        }
-    }
-
-    private void editItem() {
+    private void editItemChooseType() {
         System.out.println("Which item would you like to edit?");
         System.out.println("[1] Income item");
         System.out.println("[2] Expense item");
         int choice = scanner.nextInt();
         scanner.nextLine();
         if (choice == 1) {
-            displayIncomeItems();
-            editItem(budget.getAllIncomeItems());
+            displayAllItemsInList(budget.getAllIncomeItems());
+            editItem(budget.getAllIncomeItems(), "income");
         } else {
-            displayExpenseItems();
-            editItem(budget.getAllExpenseItems());
+            displayAllItemsInList(budget.getAllExpenseItems());
+            editItem(budget.getAllExpenseItems(), "expense");
         }
     }
 
-    private void editItem(ArrayList<Item> items) {
+    private void editItem(ArrayList<Item> items, String type) {
         System.out.println("Which item would you like to change? (Enter the item number)");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -188,14 +182,14 @@ public class Menu {
             scanner.nextLine();
 
             if (fieldChoice >= 1 && fieldChoice <= 4) {
-                editCorrectItemField(items.get(choice), fieldChoice);
+                editCorrectItemField(items.get(choice), fieldChoice, type);
             }
         } else {
             System.out.println("That's an invalid item!");
         }
     }
 
-    private void editCorrectItemField(Item item, int fieldChoice) {
+    private void editCorrectItemField(Item item, int fieldChoice, String type) {
         System.out.println("Enter new value:");
         if (fieldChoice == 1) {
             double newAmount = scanner.nextDouble();
@@ -207,12 +201,20 @@ public class Menu {
             }
         } else if (fieldChoice == 2) {
             String newCategory = scanner.nextLine();
-            item.changeCategory(newCategory);
+            item.changeCategory(changeCategory(newCategory, type));
         } else if (fieldChoice == 3) {
             item.changeDate(changeDate());
         } else if (fieldChoice == 4) {
             String newNote = scanner.nextLine();
             item.changeNote(newNote);
+        }
+    }
+
+    private Category changeCategory(String newCategory, String type) {
+        if (type.equals("income")) {
+            return budget.getIncomeCategories().get(newCategory);
+        } else {
+            return budget.getExpenseCategories().get(newCategory);
         }
     }
 
@@ -227,10 +229,11 @@ public class Menu {
 
     private void createSubBudget() {
         System.out.println("Which category would you like to create a sub-budget for?");
-        String category = scanner.nextLine();
+        String categoryKey = scanner.nextLine();
         System.out.println("What amount would you like to set the budget for?");
         double amount = scanner.nextDouble();
         scanner.nextLine();
+        ExpenseCategory category = budget.getExpenseCategories().get(categoryKey);
         budget.addToAllSubBudgets(new SubBudget(category, amount));
     }
 
@@ -255,5 +258,22 @@ public class Menu {
                 break;
             }
         }
+    }
+
+    // THIS METHOD IS FOR TESTING ONLY, REMOVE IN FINAL DELIVERABLE
+    private void viewAllItemsInAllCategories() {
+        System.out.println("--------------------");
+        System.out.println("Income Categories");
+        for (Category c : budget.getIncomeCategories().values()) {
+            System.out.println(c.getName());
+            displayAllItemsInList(c.getAllItems());
+        }
+        System.out.println("--------------------");
+        System.out.println("Expense Categories");
+        for (Category c : budget.getExpenseCategories().values()) {
+            System.out.println(c.getName());
+            displayAllItemsInList(c.getAllItems());
+        }
+        System.out.println("--------------------");
     }
 }

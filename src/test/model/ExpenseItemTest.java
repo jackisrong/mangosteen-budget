@@ -13,7 +13,7 @@ public class ExpenseItemTest {
 
     @BeforeEach
     public void setup() throws NegativeMonetaryAmountException {
-        item = new ExpenseItem(51.29, "Food", LocalDate.of(2019, 9, 20), "hello");
+        item = new ExpenseItem(51.29, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 20), "hello");
     }
 
     @Test

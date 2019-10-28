@@ -1,4 +1,4 @@
 Food,360.78
 Transportation,56.23
 Savings,450.1
-Gifts,10.0
+Gift,10.0

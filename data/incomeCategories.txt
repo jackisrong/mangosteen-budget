@@ -1,11 +1,11 @@
 Salary
 Investments
 Rentals
-Gifts
+Gift
 Awards
 Grants
 Sales
-Refunds
+Refund
 Coupons
 Lottery
 Others

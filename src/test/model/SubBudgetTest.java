@@ -14,12 +14,17 @@ public class SubBudgetTest {
 
     @BeforeEach
     public void setup() {
-        subBudget = new SubBudget("Food", 500);
+        subBudget = new SubBudget(new ExpenseCategory("Food"), 500);
     }
 
     @Test
     public void getCategoryTest() {
-        assertEquals("Food", subBudget.getCategory());
+        assertEquals(new ExpenseCategory("Food"), subBudget.getCategory());
+    }
+
+    @Test
+    public void getCategoryNameTest() {
+        assertEquals("Food", subBudget.getCategoryName());
     }
 
     @Test
@@ -32,16 +37,16 @@ public class SubBudgetTest {
         assertEquals(0, subBudget.getAmountUsedThisMonth(null, LocalDate.of(2019, 9, 1)));
 
         ArrayList<Item> expenses = new ArrayList<Item>();
-        expenses.add(new ExpenseItem(0.51, "Gift", LocalDate.of(2019, 9, 20), ""));
+        expenses.add(new ExpenseItem(0.51, new ExpenseCategory("Gift"), LocalDate.of(2019, 9, 20), ""));
         assertEquals(0, subBudget.getAmountUsedThisMonth(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(109.81, "Food", LocalDate.of(2019, 9, 23), ""));
+        expenses.add(new ExpenseItem(109.81, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 23), ""));
         assertEquals(109.81, subBudget.getAmountUsedThisMonth(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(203.09, "Transportation", LocalDate.of(2019, 9, 17), ""));
+        expenses.add(new ExpenseItem(203.09, new ExpenseCategory("Transportation"), LocalDate.of(2019, 9, 17), ""));
         assertEquals(109.81, subBudget.getAmountUsedThisMonth(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(6.98, "Food", LocalDate.of(2019, 9, 5), ""));
+        expenses.add(new ExpenseItem(6.98, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 5), ""));
         assertEquals(109.81 + 6.98, subBudget.getAmountUsedThisMonth(expenses, LocalDate.of(2019, 9, 1)));
     }
 
@@ -50,16 +55,16 @@ public class SubBudgetTest {
         assertEquals(500, subBudget.getAmountLeft(null, LocalDate.of(2019, 9, 1)));
 
         ArrayList<Item> expenses = new ArrayList<Item>();
-        expenses.add(new ExpenseItem(0.51, "Gift", LocalDate.of(2019, 9, 20), ""));
+        expenses.add(new ExpenseItem(0.51, new ExpenseCategory("Gift"), LocalDate.of(2019, 9, 20), ""));
         assertEquals(500, subBudget.getAmountLeft(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(109.81, "Food", LocalDate.of(2019, 9, 23), ""));
+        expenses.add(new ExpenseItem(109.81, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 23), ""));
         assertEquals(500 - 109.81, subBudget.getAmountLeft(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(203.09, "Transportation", LocalDate.of(2019, 9, 17), ""));
+        expenses.add(new ExpenseItem(203.09, new ExpenseCategory("Transportation"), LocalDate.of(2019, 9, 17), ""));
         assertEquals(500 - 109.81, subBudget.getAmountLeft(expenses, LocalDate.of(2019, 9, 1)));
 
-        expenses.add(new ExpenseItem(6.98, "Food", LocalDate.of(2019, 9, 5), ""));
+        expenses.add(new ExpenseItem(6.98, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 5), ""));
         assertEquals(500 - 109.81 - 6.98, subBudget.getAmountLeft(expenses, LocalDate.of(2019, 9, 1)));
     }
 }

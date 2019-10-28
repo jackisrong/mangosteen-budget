@@ -4,18 +4,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SubBudget {
-    private String category;
+    private Category category;
     private double amount;
 
     // EFFECTS: creates new SubBudget with specified fields
-    public SubBudget(String category, double amount) {
+    public SubBudget(ExpenseCategory category, double amount) {
         this.category = category;
         this.amount = amount;
     }
 
     // EFFECTS: returns category of sub-budget
-    public String getCategory() {
+    public Category getCategory() {
         return category;
+    }
+
+    // EFFECTS: returns category name of sub-budget
+    public String getCategoryName() {
+        return category.getName();
     }
 
     // EFFECTS: returns amount of sub-budget
