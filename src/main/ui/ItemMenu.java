@@ -7,78 +7,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Menu {
+public class ItemMenu {
     private Scanner scanner = new Scanner(System.in);
-    private Budget budget = new Budget();
+    private Budget budget;
 
-    public void run() {
-        budget.loadAllExistingData();
-        displayMonthlyView();
-        boolean keepRunning = true;
-        while (keepRunning) {
-            displayChoices();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            keepRunning = runAppropriateFunctionBasedOnChoice(choice);
-        }
-        budget.saveAllExistingData();
+    public ItemMenu(Budget budget) {
+        this.budget = budget;
     }
 
-    private void displayChoices() {
-        System.out.println("What would you like to do?");
-        System.out.println("[1] Add income or expense item");
-        System.out.println("[2] Display all income and expense items");
-        System.out.println("[3] Edit an income or expense item");
-        System.out.println("[4] Create a monthly sub-budget to track money spent on individual categories");
-        System.out.println("[5] View sub-budgets");
-        System.out.println("[6] Edit a sub-budget's amount");
-        System.out.println("[7] FOR TESTING ONLY: View all items in each category");
-        System.out.println("[other] Save and quit");
-    }
-
-    private void displayMonthlyView() {
-        int currentYear = LocalDate.now().getYear();
-        int currentMonth = LocalDate.now().getMonthValue();
-        double totalMonthlyIncome = 0.0;
-        double totalMonthlyExpenses = 0.0;
-        for (Item i : budget.getAllIncomeItems()) {
-            if (i.getDate().getYear() == currentYear && i.getDate().getMonthValue() == currentMonth) {
-                totalMonthlyIncome += i.getAmount();
-            }
-        }
-        for (Item e : budget.getAllExpenseItems()) {
-            if (e.getDate().getYear() == currentYear && e.getDate().getMonthValue() == currentMonth) {
-                totalMonthlyExpenses += e.getAmount();
-            }
-        }
-        System.out.println("Total income this month: " + totalMonthlyIncome);
-        System.out.println("Total expenses this month: " + totalMonthlyExpenses);
-        System.out.println("Net income this month: " + (totalMonthlyIncome - totalMonthlyExpenses));
-        System.out.println("--------------------");
-    }
-
-    private boolean runAppropriateFunctionBasedOnChoice(int choice) {
-        if (choice == 1) {
-            createItem();
-        } else if (choice == 2) {
-            displayAllItems();
-        } else if (choice == 3) {
-            editItemChooseType();
-        } else if (choice == 4) {
-            createSubBudget();
-        } else if (choice == 5) {
-            viewSubBudgets();
-        } else if (choice == 6) {
-            changeSubBudgetAmount();
-        } else if (choice == 7) {
-            viewAllItemsInAllCategories();
-        } else {
-            return false;
-        }
-        return true;
-    }
-
-    private void createItem() {
+    public void createItemPrompt() {
         System.out.println("Which item would you like to create?");
         System.out.println("[1] Income item");
         System.out.println("[2] Expense item");
@@ -107,33 +44,27 @@ public class Menu {
         String note = scanner.nextLine();
 
         if (type.equals("income")) {
-            createIncomeItem(amount, budget.getIncomeCategories().get(categoryKey), date, note);
+            createItem(amount, budget.getIncomeCategories().get(categoryKey), date, note, type);
         } else {
-            createExpenseItem(amount, budget.getExpenseCategories().get(categoryKey), date, note);
+            createItem(amount, budget.getExpenseCategories().get(categoryKey), date, note, type);
         }
     }
 
-    private void createIncomeItem(double amount, Category category, LocalDate date, String note) {
+    private void createItem(double amount, Category category, LocalDate date, String note, String type) {
         try {
-            budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+            if (type.equals("income")) {
+                budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+            } else {
+                budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+            }
         } catch (NegativeMonetaryAmountException e) {
-            System.out.println("Invalid monetary amount!  Your amount is negative!");
+            System.out.println("Invalid monetary amount! Your amount is negative!");
         } finally {
-            System.out.println("Income item creation process has finished.");
+            System.out.println("Item creation process has finished.");
         }
     }
 
-    private void createExpenseItem(double amount, Category category, LocalDate date, String note) {
-        try {
-            budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
-        } catch (NegativeMonetaryAmountException e) {
-            System.out.println("Invalid monetary amount!  Your amount is negative!");
-        } finally {
-            System.out.println("Expense item creation process has finished.");
-        }
-    }
-
-    private void displayAllItems() {
+    public void displayAllItems() {
         System.out.println("--------------------");
         System.out.println("Income Items");
         displayAllItemsInList(budget.getAllIncomeItems());
@@ -152,7 +83,7 @@ public class Menu {
         }
     }
 
-    private void editItemChooseType() {
+    public void editItemChooseType() {
         System.out.println("Which item would you like to edit?");
         System.out.println("[1] Income item");
         System.out.println("[2] Expense item");
@@ -227,41 +158,8 @@ public class Menu {
         return LocalDate.of(year, month, day);
     }
 
-    private void createSubBudget() {
-        System.out.println("Which category would you like to create a sub-budget for?");
-        String categoryKey = scanner.nextLine();
-        System.out.println("What amount would you like to set the budget for?");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
-        ExpenseCategory category = budget.getExpenseCategories().get(categoryKey);
-        budget.addToAllSubBudgets(new SubBudget(category, amount));
-    }
-
-    private void viewSubBudgets() {
-        for (SubBudget b : budget.getAllSubBudgets()) {
-            System.out.println("Sub-budget for " + b.getCategory() + " has used "
-                    + b.getAmountUsedThisMonth(budget.getAllExpenseItems(), LocalDate.now()) + " of " + b.getAmount()
-                    + " (" + b.getAmountLeft(budget.getAllExpenseItems(), LocalDate.now()) + " left in sub-budget)");
-        }
-    }
-
-    private void changeSubBudgetAmount() {
-        viewSubBudgets();
-        System.out.println("Which category's sub-budget would you like to edit?");
-        String category = scanner.nextLine();
-        for (SubBudget s : budget.getAllSubBudgets()) {
-            if (s.getCategory().equals(category)) {
-                System.out.println("Enter new amount for sub-budget:");
-                double newAmount = scanner.nextDouble();
-                scanner.nextLine();
-                s.changeAmount(newAmount);
-                break;
-            }
-        }
-    }
-
     // THIS METHOD IS FOR TESTING ONLY, REMOVE IN FINAL DELIVERABLE
-    private void viewAllItemsInAllCategories() {
+    public void viewAllItemsInAllCategories() {
         System.out.println("--------------------");
         System.out.println("Income Categories");
         for (Category c : budget.getIncomeCategories().values()) {

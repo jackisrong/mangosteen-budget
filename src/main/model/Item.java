@@ -42,9 +42,8 @@ public abstract class Item {
     // EFFECTS: reflexive relationship (one-to-many) - set category to null, then remove this item from category's list
     public void removeCategory(Category category) {
         if (category.equals(this.category)) {
-            Category tempCategory = this.category;
             this.category = null;
-            tempCategory.removeItem(this);
+            category.removeItem(this);
         }
     }
 
