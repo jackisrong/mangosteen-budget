@@ -5,14 +5,17 @@ import model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Scanner;
 
-public class ItemMenu {
+public class ItemMenu extends Observable {
     private Scanner scanner = new Scanner(System.in);
     private Budget budget;
 
     public ItemMenu(Budget budget) {
         this.budget = budget;
+        // ADDING OBSERVER FOR DELIVERABLE 10 OBSERVER PATTERN
+        addObserver(new ConsolePrinter());
     }
 
     public void createItemPrompt() {
@@ -52,11 +55,17 @@ public class ItemMenu {
 
     private void createItem(double amount, Category category, LocalDate date, String note, String type) {
         try {
+            Item i;
             if (type.equals("income")) {
-                budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+                i = new IncomeItem(amount, category, date, note);
+                budget.addToAllIncomeItems(i);
             } else {
-                budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+                i = new ExpenseItem(amount, category, date, note);
+                budget.addToAllExpenseItems(i);
             }
+            // SETTING TRIGGER FOR DELIVERABLE 10 OBSERVER PATTERN
+            setChanged();
+            notifyObservers(i);
         } catch (NegativeMonetaryAmountException e) {
             System.out.println("Invalid monetary amount! Your amount is negative!");
         } finally {
