@@ -33,10 +33,12 @@ public class Budget implements Loadable, Saveable {
         return allSubBudgets;
     }
 
+    // EFFECTS: returns HashMap of income categories
     public Map<String, IncomeCategory> getIncomeCategories() {
         return incomeCategories;
     }
 
+    // EFFECTS: returns HashMap of expense categories
     public Map<String, ExpenseCategory> getExpenseCategories() {
         return expenseCategories;
     }

@@ -1,7 +1,9 @@
 package ui;
 
 import model.*;
+import network.Quote;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class MainMenu {
 
     public void run() {
         budget.loadAllExistingData();
+        displayRandomQuote();
         displayMonthlyView();
         boolean keepRunning = true;
         while (keepRunning) {
@@ -22,6 +25,11 @@ public class MainMenu {
             keepRunning = runAppropriateFunctionBasedOnChoice(choice);
         }
         budget.saveAllExistingData();
+    }
+
+    private void displayRandomQuote() {
+        Quote quote = new Quote();
+        quote.parseQuote();
     }
 
     private void displayChoices() {
