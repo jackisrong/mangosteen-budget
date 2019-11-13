@@ -3,7 +3,6 @@ package ui;
 import model.*;
 import network.Quote;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
