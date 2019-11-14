@@ -1,8 +1,13 @@
 package ui;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.*;
 import network.Quote;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -12,8 +17,14 @@ public class MainMenu {
     private ItemMenu itemMenu = new ItemMenu(budget);
     private SubBudgetMenu subBudgetMenu = new SubBudgetMenu(budget);
 
-    public void run() {
+    public void run(Stage stage) {
         budget.loadAllExistingData();
+        try {
+            loadGUI(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*
         displayRandomQuote();
         displayMonthlyView();
         boolean keepRunning = true;
@@ -24,6 +35,17 @@ public class MainMenu {
             keepRunning = runAppropriateFunctionBasedOnChoice(choice);
         }
         budget.saveAllExistingData();
+         */
+    }
+
+    private void loadGUI(Stage stage) throws IOException {
+        FxmlController controller = new FxmlController();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/ui/resources/mainMenu.fxml"));
+        loader.setController(controller);
+        VBox vbox = loader.load();
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
     }
 
     private void displayRandomQuote() {

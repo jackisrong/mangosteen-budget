@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.HBox?>
+<VBox>
+    <ToolBar>
+        <Label text="Overview"/>
+    </ToolBar>
+    <HBox>
+        <Label text="Income"/>
+        <Label text="Expense"/>
+        <Label text="Balance"/>
+    </HBox>
+    <HBox>
+        <Label text="Budgets"/>
+    </HBox>
+    <HBox>
+        <Label text="Transactions"/>
+    </HBox>
+    <Button text="My label"/>
+</VBox>
