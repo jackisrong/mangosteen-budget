@@ -1,7 +1,6 @@
 package model;
 
-import exceptions.CategoryAlreadyExistsException;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -37,6 +36,26 @@ public abstract class Category {
 
     public ArrayList<Item> getAllItems() {
         return itemsInCategory;
+    }
+
+    public double getAllItemAmountTotal() {
+        double total = 0.0;
+        for (Item i : itemsInCategory) {
+            total += i.getAmount();
+        }
+        return total;
+    }
+
+    public double getAllItemAmountThisMonthTotal() {
+        double total = 0.0;
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        for (Item i : itemsInCategory) {
+            if (i.getDate().getYear() == year && i.getDate().getMonthValue() == month) {
+                total += i.getAmount();
+            }
+        }
+        return total;
     }
 
     /*

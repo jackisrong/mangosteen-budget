@@ -3,21 +3,118 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
-<VBox>
-    <ToolBar>
-        <Label text="Overview"/>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ScrollPane?>
+<VBox id="mainContainer" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <ToolBar id="topBar">
+        <HBox prefWidth="300" alignment="CENTER">
+            <Label text="Overview"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+" onAction="#addItem">       <!-- ignore this error, controller is set in .java -->
+                <tooltip>
+                    <Tooltip text="Create new income/expense item"/>
+                </tooltip>
+            </Button>
+        </HBox>
     </ToolBar>
-    <HBox>
-        <Label text="Income"/>
-        <Label text="Expense"/>
-        <Label text="Balance"/>
-    </HBox>
-    <HBox>
-        <Label text="Budgets"/>
-    </HBox>
-    <HBox>
-        <Label text="Transactions"/>
-    </HBox>
-    <Button text="My label"/>
+
+    <ScrollPane fitToWidth="true">
+        <VBox id="contentContainer">
+            <Label fx:id="quoteContent" text="Loading..."/>
+            <Label fx:id="quoteAuthor" text="Please wait a few seconds..."/>
+
+            <Separator/>
+
+            <Label fx:id="summaryTitle" styleClass="sectionTitle" text="Summary for"/>
+            <HBox>
+                <Label text="Income"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="incomeAmount"/>
+            </HBox>
+            <HBox>
+                <Label text="Expenses"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="expenseAmount"/>
+            </HBox>
+            <HBox>
+                <Label text="Balance"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="balanceAmount"/>
+            </HBox>
+
+            <Separator/>
+
+            <!--
+            <Label styleClass="sectionTitle" text="Budgets"/>
+
+            <Separator/>
+
+            <Label styleClass="sectionTitle" text="Transactions"/>
+            <HBox>
+                <VBox alignment="CENTER">
+                    <Label styleClass="transactionMonth" text="JAN"/>
+                    <Label styleClass="transactionDate" text="16"/>
+                </VBox>
+                <VBox styleClass="transactionNameCategory">
+                    <Label styleClass="transactionName" text="Netflix"/>
+                    <Label styleClass="transactionCategory" text="Entertainment"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label styleClass="transactionAmount" text="\$10.99"/>
+            </HBox>
+
+            <Separator/>
+            -->
+
+            <Label fx:id="incomePieChartTitle" styleClass="sectionTitle" text="Income Summary for"/>
+            <Label fx:id="incomePieChartNotice"/>
+            <PieChart fx:id="incomePieChart" legendVisible="false" prefHeight="0"/>
+
+            <Separator/>
+
+            <Label fx:id="expensePieChartTitle" styleClass="sectionTitle" text="Expenses Summary for"/>
+            <Label fx:id="expensePieChartNotice"/>
+            <PieChart fx:id="expensePieChart" legendVisible="false" prefHeight="0"/>
+        </VBox>
+    </ScrollPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <ToolBar id="bottomBar">
+        <HBox>
+            <Button id="selectedMenuButton" text="Overview">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/overview_purple.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="notSelectedMenuButton" text="Spending">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/spending_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="notSelectedMenuButton" text="Budgets">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/budgets_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </ToolBar>
 </VBox>

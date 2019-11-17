@@ -9,13 +9,19 @@ import java.net.URL;
 import java.util.Map;
 
 public class Quote {
+    private String quoteContent;
+    private String quoteAuthor;
+
+    public Quote() {
+        parseQuote();
+    }
+
     // Code from deliverable 10 EdX page
     private String getRandomQuote() throws IOException {
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
         try {
-            String theURL = "http://quote-garden.herokuapp.com/quotes/random";
-            URL url = new URL(theURL);
+            URL url = new URL("http://quote-garden.herokuapp.com/quotes/random");
             br = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
             while ((line = br.readLine()) != null) {
@@ -42,15 +48,19 @@ public class Quote {
         Gson gson = new Gson();
         Map parsedMap = gson.fromJson(json, Map.class);
 
-        String quote = parsedMap.get("quoteText").toString();
-        String author = parsedMap.get("quoteAuthor").toString();
+        quoteContent = parsedMap.get("quoteText").toString();
+        quoteAuthor = parsedMap.get("quoteAuthor").toString();
 
-        System.out.println("\"" + quote + "\"");
-
-        if (author.equals("")) {
-            System.out.println("- Anonymous");
-        } else {
-            System.out.println("- " + author);
+        if (quoteAuthor.equals("")) {
+            quoteAuthor = "Anonymous";
         }
+    }
+
+    public String getQuoteContent() {
+        return quoteContent;
+    }
+
+    public String getQuoteAuthor() {
+        return quoteAuthor;
     }
 }

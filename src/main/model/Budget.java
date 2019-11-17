@@ -15,8 +15,8 @@ public class Budget implements Loadable, Saveable {
     private ArrayList<Item> allIncomeItems = new ArrayList<Item>();
     private ArrayList<Item> allExpenseItems = new ArrayList<Item>();
     private ArrayList<SubBudget> allSubBudgets = new ArrayList<SubBudget>();
-    private Map<String, IncomeCategory> incomeCategories = new HashMap<String, IncomeCategory>();
-    private Map<String, ExpenseCategory> expenseCategories = new HashMap<String, ExpenseCategory>();
+    private Map<String, Category> incomeCategories = new HashMap<String, Category>();
+    private Map<String, Category> expenseCategories = new HashMap<String, Category>();
 
     // EFFECTS: returns ArrayList allIncomeItems
     public ArrayList<Item> getAllIncomeItems() {
@@ -34,12 +34,12 @@ public class Budget implements Loadable, Saveable {
     }
 
     // EFFECTS: returns HashMap of income categories
-    public Map<String, IncomeCategory> getIncomeCategories() {
+    public Map<String, Category> getIncomeCategories() {
         return incomeCategories;
     }
 
     // EFFECTS: returns HashMap of expense categories
-    public Map<String, ExpenseCategory> getExpenseCategories() {
+    public Map<String, Category> getExpenseCategories() {
         return expenseCategories;
     }
 
@@ -119,7 +119,7 @@ public class Budget implements Loadable, Saveable {
             String[] splitLine = rawLine.split(",");
             String categoryKey = splitLine[0];
             double amount = Double.parseDouble(splitLine[1]);
-            ExpenseCategory category = expenseCategories.get(categoryKey);
+            Category category = expenseCategories.get(categoryKey);
             parsedData.add(new SubBudget(category, amount));
         }
 

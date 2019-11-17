@@ -1,6 +1,7 @@
 package ui;
 
 import model.Budget;
+import model.Category;
 import model.ExpenseCategory;
 import model.SubBudget;
 
@@ -21,7 +22,7 @@ public class SubBudgetMenu {
         System.out.println("What amount would you like to set the budget for?");
         double amount = scanner.nextDouble();
         scanner.nextLine();
-        ExpenseCategory category = budget.getExpenseCategories().get(categoryKey);
+        Category category = budget.getExpenseCategories().get(categoryKey);
         budget.addToAllSubBudgets(new SubBudget(category, amount));
     }
 

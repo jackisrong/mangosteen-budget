@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<VBox id="mainContainer" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <ToolBar id="topBar">
+        <HBox prefWidth="300" alignment="CENTER">
+            <Button text="&#x1f860;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Create Item"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </ToolBar>
+
+    <ChoiceBox value="Income">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Income"/>
+                <String fx:value="Expense"/>
+            </FXCollections>
+        </items>
+    </ChoiceBox>
+
+    <ScrollPane fitToWidth="true">
+        <VBox id="contentContainer">
+
+        </VBox>
+    </ScrollPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <!--
+    <ToolBar id="bottomBar">
+        <HBox>
+            <Button id="selectedMenuButton" text="Overview">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/overview_purple.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="notSelectedMenuButton" text="Spending">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/spending_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="notSelectedMenuButton" text="Budgets">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/budgets_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </ToolBar>
+    -->
+</VBox>

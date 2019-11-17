@@ -2,3 +2,4 @@
 20.0,Gift,2019-10-20,from Justin
 607.68,Investments,2019-10-05,Apple stocks
 500.0,Salary,2019-11-05,October salary
+1025.60,Investments,2019-11-15,Apple stocks

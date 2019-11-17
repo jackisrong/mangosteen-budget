@@ -1,8 +1,14 @@
 package ui;
 
 import exceptions.NegativeMonetaryAmountException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -10,12 +16,37 @@ import java.util.Scanner;
 
 public class ItemMenu extends Observable {
     private Scanner scanner = new Scanner(System.in);
+    private Stage stage;
+    private Scene scene;
     private Budget budget;
 
     public ItemMenu(Budget budget) {
         this.budget = budget;
-        // ADDING OBSERVER FOR DELIVERABLE 10 OBSERVER PATTERN
-        addObserver(new ConsolePrinter());
+    }
+
+    public void run(Stage stage) {
+        this.stage = stage;
+        try {
+            loadGUI();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IOException occurred while initializing item menu GUI.");
+        }
+    }
+
+    private void loadGUI() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/ui/resources/itemMenu.fxml"));
+        loader.setController(this);
+        VBox panel = loader.load();
+        scene = new Scene(panel);
+        scene.getStylesheets().add("/ui/resources/itemMenu.css");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void initialize() {
     }
 
     public void createItemPrompt() {
@@ -63,9 +94,6 @@ public class ItemMenu extends Observable {
                 i = new ExpenseItem(amount, category, date, note);
                 budget.addToAllExpenseItems(i);
             }
-            // SETTING TRIGGER FOR DELIVERABLE 10 OBSERVER PATTERN
-            setChanged();
-            notifyObservers(i);
         } catch (NegativeMonetaryAmountException e) {
             System.out.println("Invalid monetary amount! Your amount is negative!");
         } finally {
@@ -165,22 +193,5 @@ public class ItemMenu extends Observable {
         int day = scanner.nextInt();
         scanner.nextLine();
         return LocalDate.of(year, month, day);
-    }
-
-    // THIS METHOD IS FOR TESTING ONLY, REMOVE IN FINAL DELIVERABLE
-    public void viewAllItemsInAllCategories() {
-        System.out.println("--------------------");
-        System.out.println("Income Categories");
-        for (Category c : budget.getIncomeCategories().values()) {
-            System.out.println(c.getName());
-            displayAllItemsInList(c.getAllItems());
-        }
-        System.out.println("--------------------");
-        System.out.println("Expense Categories");
-        for (Category c : budget.getExpenseCategories().values()) {
-            System.out.println(c.getName());
-            displayAllItemsInList(c.getAllItems());
-        }
-        System.out.println("--------------------");
     }
 }

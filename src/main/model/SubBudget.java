@@ -8,7 +8,7 @@ public class SubBudget {
     private double amount;
 
     // EFFECTS: creates new SubBudget with specified fields
-    public SubBudget(ExpenseCategory category, double amount) {
+    public SubBudget(Category category, double amount) {
         this.category = category;
         this.amount = amount;
     }
