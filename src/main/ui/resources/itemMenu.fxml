@@ -4,27 +4,27 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.GridPane?>
 <VBox id="mainContainer" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
     <ToolBar id="topBar">
         <HBox prefWidth="300" alignment="CENTER">
-            <Button text="&#x1f860;"/>
+            <Button text="&#x1f860;" onAction="#backToMainMenu"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label text="Create Item"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </ToolBar>
 
-    <ChoiceBox value="Income">
+    <ChoiceBox fx:id="itemTypeChoice" onAction="#chooseItemType" value="Income" prefWidth="100">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Income"/>
@@ -34,44 +34,40 @@
     </ChoiceBox>
 
     <ScrollPane fitToWidth="true">
-        <VBox id="contentContainer">
-
-        </VBox>
+        <GridPane fx:id="categoriesContainer" hgap="5" vgap="5">
+            <!-- elements loaded through controller class -->
+        </GridPane>
     </ScrollPane>
 
     <Region VBox.vgrow="ALWAYS"/>
 
-    <!--
-    <ToolBar id="bottomBar">
+    <VBox fx:id="enterInfoContainer" visible="false">
         <HBox>
-            <Button id="selectedMenuButton" text="Overview">
-                <graphic>
-                    <ImageView fitHeight="25" fitWidth="25">
-                        <image>
-                            <Image url="/ui/resources/images/overview_purple.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button id="notSelectedMenuButton" text="Spending">
-                <graphic>
-                    <ImageView fitHeight="25" fitWidth="25">
-                        <image>
-                            <Image url="/ui/resources/images/spending_grey.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button id="notSelectedMenuButton" text="Budgets">
-                <graphic>
-                    <ImageView fitHeight="25" fitWidth="25">
-                        <image>
-                            <Image url="/ui/resources/images/budgets_grey.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
+            <Label fx:id="chosenCategory" text="Category: Income"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="amountLabel" text="\$0.00"/>
         </HBox>
-    </ToolBar>
-    -->
+        <TextField fx:id="noteField" promptText="Write a Note (optional)"/>
+        <DatePicker fx:id="datePicker" promptText="Choose Date" prefWidth="Infinity"/>
+        <HBox>
+            <Button text="7" onAction="#amountNumberPadPressed"/>
+            <Button text="8" onAction="#amountNumberPadPressed"/>
+            <Button text="9" onAction="#amountNumberPadPressed"/>
+        </HBox>
+        <HBox>
+            <Button text="4" onAction="#amountNumberPadPressed"/>
+            <Button text="5" onAction="#amountNumberPadPressed"/>
+            <Button text="6" onAction="#amountNumberPadPressed"/>
+        </HBox>
+        <HBox>
+            <Button text="1" onAction="#amountNumberPadPressed"/>
+            <Button text="2" onAction="#amountNumberPadPressed"/>
+            <Button text="3" onAction="#amountNumberPadPressed"/>
+        </HBox>
+        <HBox>
+            <Button id="backButton" text="&#x232B;" onAction="#amountNumberPadPressed"/>
+            <Button text="0" onAction="#amountNumberPadPressed"/>
+            <Button id="okButton" text="&#x2714;" onAction="#amountNumberPadPressed"/>
+        </HBox>
+    </VBox>
 </VBox>

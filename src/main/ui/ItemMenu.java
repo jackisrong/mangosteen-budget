@@ -1,26 +1,43 @@
 package ui;
 
-import exceptions.NegativeMonetaryAmountException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Scanner;
+import java.util.*;
 
 public class ItemMenu extends Observable {
-    private Scanner scanner = new Scanner(System.in);
     private Stage stage;
     private Scene scene;
+    private MainMenu mainMenu;
     private Budget budget;
 
-    public ItemMenu(Budget budget) {
+    @FXML
+    private ChoiceBox itemTypeChoice;
+    @FXML
+    private GridPane categoriesContainer;
+    @FXML
+    private VBox enterInfoContainer;
+    @FXML
+    private Label chosenCategory;
+    @FXML
+    private TextField noteField;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private Label amountLabel;
+
+    public ItemMenu(MainMenu mainMenu, Budget budget) {
+        this.mainMenu = mainMenu;
         this.budget = budget;
     }
 
@@ -42,26 +59,91 @@ public class ItemMenu extends Observable {
         scene = new Scene(panel);
         scene.getStylesheets().add("/ui/resources/itemMenu.css");
         stage.setScene(scene);
-        stage.show();
+        stage.setResizable(true);
+        stage.setResizable(false);
     }
 
     @FXML
     private void initialize() {
+        loadCategories(budget.getIncomeCategories().values());
     }
 
-    public void createItemPrompt() {
-        System.out.println("Which item would you like to create?");
-        System.out.println("[1] Income item");
-        System.out.println("[2] Expense item");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        if (choice == 1) {
-            createItemGetValues("income");
-        } else {
-            createItemGetValues("expense");
+    @FXML
+    private void backToMainMenu() {
+        mainMenu.run(stage);
+    }
+
+    private void loadCategories(Collection<Category> allCategories) {
+        categoriesContainer.getChildren().clear();
+        int counter = 0;
+        for (Category c : allCategories) {
+            Button b = new Button(c.getName());
+            b.setOnAction(this::choseCategory);
+            categoriesContainer.add(b, counter % 4, counter / 4, 1, 1);
+            counter++;
         }
     }
 
+    @FXML
+    private void chooseItemType() {
+        enterInfoContainer.setVisible(false);
+        if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+            loadCategories(budget.getIncomeCategories().values());
+        } else {
+            loadCategories(budget.getExpenseCategories().values());
+        }
+    }
+
+    @FXML
+    private void choseCategory(ActionEvent event) {
+        Button b = (Button) event.getSource();
+        chosenCategory.setText("Category: " + b.getText());
+        if (!enterInfoContainer.isVisible()) {
+            enterInfoContainer.setVisible(true);
+        }
+    }
+
+    private String getCurrentAmountWithoutSymbols() {
+        String currentAmount = amountLabel.getText().substring(1);
+        String currentAmountNoSymbols = currentAmount.substring(0, currentAmount.length() - 3)
+                + currentAmount.substring(currentAmount.length() - 2);
+        return currentAmountNoSymbols;
+    }
+
+    private String formatNewAmount(String newAmountString) {
+        DecimalFormat df = new DecimalFormat("#0.00");
+        double newAmount = Double.parseDouble(newAmountString.substring(0, newAmountString.length() - 2)
+                + "." + newAmountString.substring(newAmountString.length() - 2));
+        return "$" + df.format(newAmount);
+    }
+
+    @FXML
+    private void amountNumberPadPressed(ActionEvent event) {
+        Button b = (Button) event.getSource();
+        String currentAmountNoSymbols = getCurrentAmountWithoutSymbols();
+        if (b.getId() == null) {
+            long currentAmountInteger = Long.parseLong(currentAmountNoSymbols);
+            String newAmountString = "000" + (currentAmountInteger * 10 + Integer.parseInt(b.getText()));
+            amountLabel.setText(formatNewAmount(newAmountString));
+        } else if (b.getId().equals("backButton")) {
+            String newAmountString = "000" + currentAmountNoSymbols.substring(0, currentAmountNoSymbols.length() - 1);
+            amountLabel.setText(formatNewAmount(newAmountString));
+        } else if (b.getId().equals("okButton")) {
+            Double amount = Double.parseDouble(currentAmountNoSymbols); // TODO: change to long
+            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
+            LocalDate date = datePicker.getValue();
+            String note = noteField.getText();
+            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+                //budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+            } else {
+                //budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+            }
+            //backToMainMenu();
+        }
+    }
+
+
+    /*
     private void createItemGetValues(String type) {
         System.out.println("How much is your " + type + "? (Enter an amount)");
         double amount = scanner.nextDouble();
@@ -76,12 +158,6 @@ public class ItemMenu extends Observable {
         LocalDate date = LocalDate.of(year, month, day);
         System.out.println("Any additional info? (Enter a note)");
         String note = scanner.nextLine();
-
-        if (type.equals("income")) {
-            createItem(amount, budget.getIncomeCategories().get(categoryKey), date, note, type);
-        } else {
-            createItem(amount, budget.getExpenseCategories().get(categoryKey), date, note, type);
-        }
     }
 
     private void createItem(double amount, Category category, LocalDate date, String note, String type) {
@@ -109,15 +185,6 @@ public class ItemMenu extends Observable {
         System.out.println("Expense Items");
         displayAllItemsInList(budget.getAllExpenseItems());
         System.out.println("--------------------");
-    }
-
-    private void displayAllItemsInList(ArrayList<Item> items) {
-        int counter = 0;
-        for (Item i : items) {
-            System.out.print("[" + counter + "] $" + i.getAmount() + " in category " + i.getCategoryName() + " on ");
-            System.out.println(i.getDate() + " with note: " + i.getNote());
-            counter++;
-        }
     }
 
     public void editItemChooseType() {
@@ -194,4 +261,5 @@ public class ItemMenu extends Observable {
         scanner.nextLine();
         return LocalDate.of(year, month, day);
     }
+     */
 }

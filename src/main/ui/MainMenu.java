@@ -21,11 +21,10 @@ import java.util.Collection;
 import java.util.Scanner;
 
 public class MainMenu {
-    private Scanner scanner = new Scanner(System.in);
     private Stage stage;
     private Scene scene;
     private Budget budget = new Budget();
-    private ItemMenu itemMenu = new ItemMenu(budget);
+    private ItemMenu itemMenu = new ItemMenu(this, budget);
     private SubBudgetMenu subBudgetMenu = new SubBudgetMenu(budget);
 
     @FXML
@@ -53,8 +52,11 @@ public class MainMenu {
     @FXML
     private Label expensePieChartNotice;
 
-    public void run(Stage stage) {
+    public MainMenu() {
         budget.loadAllExistingData();
+    }
+
+    public void run(Stage stage) {
         this.stage = stage;
         try {
             loadGUI();
@@ -72,7 +74,8 @@ public class MainMenu {
         scene = new Scene(panel);
         scene.getStylesheets().add("/ui/resources/mainMenu.css");
         stage.setScene(scene);
-        stage.show();
+        stage.setResizable(true);
+        stage.setResizable(false);
     }
 
     @FXML
@@ -154,6 +157,8 @@ public class MainMenu {
         itemMenu.run(stage);
     }
 
+
+    /*
     private void displayChoices() {
         System.out.println("What would you like to do?");
         System.out.println("[1] Add income or expense item");
@@ -186,4 +191,5 @@ public class MainMenu {
         }
         return true;
     }
+     */
 }

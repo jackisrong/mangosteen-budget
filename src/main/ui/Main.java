@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     public static void main(String[] args) {
+        System.out.println("Loading GUI...");
         Application.launch(args);
     }
 
@@ -17,6 +18,8 @@ public class Main extends Application {
 
         MainMenu mainMenu = new MainMenu();
         mainMenu.run(primaryStage);
+
+        primaryStage.show();
     }
 
     @Override

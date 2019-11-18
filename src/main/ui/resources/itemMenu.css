@@ -3,29 +3,13 @@
     -fx-font-family: 'Arial';
 }
 
-#mainContainer, #contentContainer {
+#mainContainer, #categoriesContainer {
     -fx-background-color: #ffffff;
 }
 
 .button:hover {
 	-fx-cursor: hand;
 }
-
-/*
-.button {
-    -fx-padding: 5px 5px 5px 5px;
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-    -fx-border-radius: 2px;
-    -fx-border-color: #930fff;
-}
-
-.button:hover {
-    -fx-text-fill: #ffffff;
-	-fx-background-color: #930fff;
-	-fx-cursor: hand;
-}
-*/
 
 /* TOP BAR */
 #topBar {
@@ -44,74 +28,61 @@
     -fx-background-color: #930fff;
 }
 
-/* CONTENT CONTAINER */
-#contentContainer {
-    -fx-padding: 10px;
-    -fx-font-size: 14px;
-}
-
-#contentContainer .separator {
-    -fx-padding: 10px 0 10px 0;
-}
-
-.sectionTitle {
-    -fx-font-weight: bold;
-    -fx-padding: 0 0 5px 0;
-}
-
-/* SUMMARY FOR MONTH */
-#incomeAmount {
-    -fx-text-fill: #00e01a;
-}
-
-#expenseAmount {
-    -fx-text-fill: #e00422;
-}
-
-/* BUDGETS */
-
-
-/* TRANSACTIONS */
-.transactionMonth {
-}
-
-.transactionDate {
-    -fx-font-size: 12px;
-}
-
-.transactionNameCategory {
-    -fx-padding: 0 0 0 30px;
-}
-
-.transactionName {
-}
-
-.transactionCategory {
-    -fx-font-size: 12px;
-}
-
-.transactionAmount {
-}
-
-/* PIE CHARTS */
-.chart-pie {
+/* CHOICE BOX */
+.choice-box {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
     -fx-font-size: 13px;
 }
 
-/* BOTTOM BAR */
-#bottomBar {
-    -fx-background-color: #f7f7f7;
+/* CATEGORIES CONTAINER */
+.scroll-pane {
+    -fx-border-color: #ffffff;
 }
 
-#bottomBar .button {
-    -fx-content-display: top;
-    -fx-background-color: transparent;
+#categoriesContainer {
+    -fx-padding: 10px;
+    -fx-font-size: 13px;
 }
 
-#selectedMenuButton {
-    -fx-text-fill: #930fff;
+#categoriesContainer .separator {
+    -fx-padding: 10px 0 10px 0;
 }
 
-#notSelectedMenuButton {
-    -fx-text-fill: #c4c4c4;
+/* CATEGORY BUTTONS */
+#categoriesContainer {
+    -fx-padding: 2 !important;
+}
+
+#categoriesContainer .button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 3px;
+    -fx-wrap-text: true;
+}
+
+/* ENTER INFO CONTAINER */
+#enterInfoContainer {
+    -fx-font-size: 13px;
+    -fx-border-color: #c4c4c4;
+}
+
+#chosenCategory, #amountLabel {
+    -fx-font-size: 14px;
+    -fx-padding: 4px;
+}
+
+#enterInfoContainer .button {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #c4c4c4;
+    -fx-pref-width: 500px;
+}
+
+#enterInfoContainer .button:pressed {
+    -fx-background-color: #c4c4c4;
+}
+
+#okButton {
+    -fx-background-color: #930fff !important;
+    -fx-text-fill: #ffffff !important;
 }
