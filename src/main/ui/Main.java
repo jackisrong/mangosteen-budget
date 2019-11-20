@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private MainMenu mainMenu = new MainMenu();
+
     public static void main(String[] args) {
-        System.out.println("Loading GUI...");
+        System.out.println("Loading GUI stage...");
         Application.launch(args);
     }
 
@@ -15,8 +17,8 @@ public class Main extends Application {
         primaryStage.setWidth(411 * (4.0 / 5.0));
         primaryStage.setHeight(731 * (4.0 / 5.0));
         primaryStage.setResizable(false);
+        System.out.println("GUI stage loading completed.");
 
-        MainMenu mainMenu = new MainMenu();
         mainMenu.run(primaryStage);
 
         primaryStage.show();
@@ -24,6 +26,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        // save
+        mainMenu.save();
+        System.out.println("Thank you for using Guava.");
     }
 }

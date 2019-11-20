@@ -10,11 +10,8 @@ public abstract class Item {
     protected LocalDate date;
     protected String note;
 
-    protected Item(double amount, Category category, LocalDate date, String note)
-            throws NegativeMonetaryAmountException {
-        if (checkMonetaryValidity(amount)) {
-            this.amount = amount;
-        }
+    protected Item(double amount, Category category, LocalDate date, String note) {
+        this.amount = amount;
         setCategory(category);
         this.date = date;
         this.note = note;
@@ -72,6 +69,14 @@ public abstract class Item {
         return note;
     }
 
+    public void edit(double amount, Category category, LocalDate date, String note) {
+        this.amount = amount;
+        this.category = category;
+        this.date = date;
+        this.note = note;
+    }
+
+    /*
     // REQUIRES: valid monetary amount newAmount > 0.0
     // MODIFIES: this
     // EFFECTS: changes the item amount to newAmount
@@ -99,6 +104,7 @@ public abstract class Item {
     public void changeNote(String newNote) {
         note = newNote;
     }
+     */
 
     // EFFECTS: prints a user-friendly sentence of item details
     public abstract String viewItem();

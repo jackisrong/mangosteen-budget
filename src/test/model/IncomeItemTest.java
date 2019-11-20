@@ -42,6 +42,7 @@ public class IncomeItemTest {
         assertEquals("", item.getNote());
     }
 
+    /*
     @Test
     public void changeAmountTest() {
         assertEquals(100, item.getAmount());
@@ -91,6 +92,7 @@ public class IncomeItemTest {
         item.changeNote("Birthday gift from Justin");
         assertEquals("Birthday gift from Justin", item.getNote());
     }
+     */
 
     @Test
     public void viewItemTest() {

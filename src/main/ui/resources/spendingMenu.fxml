@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<VBox id="mainContainer" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <ToolBar id="topBar">
+        <HBox prefWidth="300" alignment="CENTER">
+            <Label text="Spending"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+">       <!-- TODO: make this do something -->
+                <tooltip>
+                    <Tooltip text="Create new income/expense item"/>
+                </tooltip>
+            </Button>
+        </HBox>
+    </ToolBar>
+
+    <ScrollPane fitToWidth="true">
+        <VBox id="contentContainer">
+            <HBox>
+                <Button id="changeYearButton" text="&#x003C;" onAction="#leftYear"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="yearLabel" text="2019"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button id="changeYearButton" text="&#x003E;" onAction="#rightYear"/>
+            </HBox>
+            <GridPane fx:id="monthGrid">
+                <!--
+                <Button text="Jan" GridPane.columnIndex="0" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="Feb" GridPane.columnIndex="1" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="Mar" GridPane.columnIndex="2" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="Apr" GridPane.columnIndex="3" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="May" GridPane.columnIndex="4" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="Jun" GridPane.columnIndex="5" GridPane.rowIndex="0" onAction="#choseMonth"/>
+                <Button text="Jul" GridPane.columnIndex="0" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                <Button text="Aug" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                <Button text="Sep" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                <Button text="Oct" GridPane.columnIndex="3" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                <Button text="Nov" GridPane.columnIndex="4" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                <Button text="Dec" GridPane.columnIndex="5" GridPane.rowIndex="1" onAction="#choseMonth"/>
+                -->
+            </GridPane>
+
+            <Separator/>
+
+            <Label fx:id="summaryTitle" styleClass="sectionTitle" text="Summary for"/>
+            <HBox>
+                <Label text="Income"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="incomeAmount"/>
+            </HBox>
+            <HBox>
+                <Label text="Expenses"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="expenseAmount"/>
+            </HBox>
+            <HBox>
+                <Label text="Balance"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="balanceAmount"/>
+            </HBox>
+
+            <Separator/>
+
+            <Label styleClass="sectionTitle" text="Transactions"/>
+            <VBox fx:id="transactionsContainer">
+                <!--
+                <HBox>
+                    <VBox alignment="CENTER">
+                        <Label styleClass="transactionMonth" text="JAN"/>
+                        <Label styleClass="transactionDate" text="16"/>
+                    </VBox>
+                    <VBox styleClass="transactionCategoryNote">
+                        <Label styleClass="transactionCategory" text="Netflix"/>
+                        <Label styleClass="transactionNote" text="Entertainment"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label styleClass="transactionAmount" text="\$10.99"/>
+                </HBox>
+                -->
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <ToolBar id="bottomBar">
+        <HBox>
+            <Button id="notSelectedMenuButton" text="Overview" onAction="#viewMain">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/overview_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="selectedMenuButton" text="Spending">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/spending_purple.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button id="notSelectedMenuButton" text="Budgets">
+                <graphic>
+                    <ImageView fitHeight="25" fitWidth="25">
+                        <image>
+                            <Image url="/ui/resources/images/budgets_grey.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </ToolBar>
+</VBox>

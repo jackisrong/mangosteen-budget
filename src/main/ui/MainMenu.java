@@ -7,24 +7,18 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Budget;
 import model.Category;
 import model.Item;
 import network.Quote;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 
-public class MainMenu {
-    private Stage stage;
-    private Scene scene;
-    private Budget budget = new Budget();
+public class MainMenu extends Menu {
     private ItemMenu itemMenu = new ItemMenu(this, budget);
+    private SpendingMenu spendingMenu = new SpendingMenu(this, itemMenu, budget);
     private SubBudgetMenu subBudgetMenu = new SubBudgetMenu(budget);
 
     @FXML
@@ -81,7 +75,8 @@ public class MainMenu {
     @FXML
     private void initialize() {
         displayRandomQuote();
-        summaryMonthNumbers();
+        summaryMonthNumbers(getCurrentMonth(), getCurrentYear(), summaryTitle, incomeAmount, expenseAmount,
+                balanceAmount);
         summaryMonthPieCharts();
     }
 
@@ -92,41 +87,8 @@ public class MainMenu {
         quoteAuthor.setText("\t- " + quote.getQuoteAuthor());
     }
 
-    private int getCurrentYear() {
-        return LocalDate.now().getYear();
-    }
-
-    private Month getCurrentMonth() {
-        return LocalDate.now().getMonth();
-    }
-
-    private double getTotalItemAmountsThisMonth(ArrayList<Item> items) {
-        double total = 0.0;
-        for (Item i : items) {
-            if (i.getDate().getYear() == getCurrentYear() && i.getDate().getMonth() == getCurrentMonth()) {
-                total += i.getAmount();
-            }
-        }
-        return total;
-    }
-
-    private String formatMonetaryAmount(double amount) {
-        DecimalFormat df = new DecimalFormat("#0.00");
-        return "$" + df.format(amount);
-    }
-
-    private void summaryMonthNumbers() {
-        double totalMonthlyIncome = getTotalItemAmountsThisMonth(budget.getAllIncomeItems());
-        double totalMonthlyExpenses = getTotalItemAmountsThisMonth(budget.getAllExpenseItems());
-        summaryTitle.setText("Summary for " + getCurrentMonth() + " " + getCurrentYear());
-
-        incomeAmount.setText(formatMonetaryAmount(totalMonthlyIncome));
-        expenseAmount.setText("-" + formatMonetaryAmount(totalMonthlyExpenses));
-        balanceAmount.setText(formatMonetaryAmount(totalMonthlyIncome - totalMonthlyExpenses));
-    }
-
     private void drawPieChart(ArrayList<Item> items, Collection<Category> hashMapValues, Label notice, PieChart chart) {
-        double allItemsAmountThisMonth = getTotalItemAmountsThisMonth(items);
+        double allItemsAmountThisMonth = getTotalItemAmounts(getCurrentMonth(), getCurrentYear(), items);
         if (allItemsAmountThisMonth == 0.0) {
             notice.setText("No items this month! (yet...)");
         } else {
@@ -135,7 +97,7 @@ public class MainMenu {
                     DecimalFormat df = new DecimalFormat("#0");
                     String percentage = df.format(c.getAllItemAmountThisMonthTotal() / allItemsAmountThisMonth * 100);
                     String label = c.getName() + "\n" + formatMonetaryAmount(c.getAllItemAmountThisMonthTotal())
-                            + "(" + percentage + "%)";
+                            + " (" + percentage + "%)";
                     PieChart.Data data = new PieChart.Data(label, c.getAllItemAmountThisMonthTotal());
                     chart.getData().add(data);
                 }
@@ -157,6 +119,15 @@ public class MainMenu {
         itemMenu.run(stage);
     }
 
+    @FXML
+    private void viewSpending() {
+        spendingMenu.run(stage);
+    }
+
+    @FXML
+    public void save() {
+        budget.saveAllExistingData();
+    }
 
     /*
     private void displayChoices() {

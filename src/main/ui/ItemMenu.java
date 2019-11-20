@@ -15,16 +15,16 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 
-public class ItemMenu extends Observable {
-    private Stage stage;
-    private Scene scene;
+public class ItemMenu extends Menu {
     private MainMenu mainMenu;
-    private Budget budget;
+    private Boolean editing;
+    private int positionOfEditItemInAppropriateList;
 
     @FXML
     private ChoiceBox itemTypeChoice;
     @FXML
     private GridPane categoriesContainer;
+    private ArrayList<Button> allCategoryButtons = new ArrayList<Button>();
     @FXML
     private VBox enterInfoContainer;
     @FXML
@@ -43,12 +43,32 @@ public class ItemMenu extends Observable {
 
     public void run(Stage stage) {
         this.stage = stage;
+        editing = false;
         try {
             loadGUI();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("IOException occurred while initializing item menu GUI.");
         }
+    }
+
+    public void runEditItem(Stage stage, Item i, int positionOfItemInAppropriateList) {
+        run(stage);
+        editing = true;
+        if (i.getClass().getName().equals("model.IncomeItem")) {
+            chooseItemType("Income");
+        } else {
+            chooseItemType("Expense");
+        }
+        for (Button b : allCategoryButtons) {
+            if (b.getText().equals(i.getCategoryName())) {
+                choseCategory(new ActionEvent(b, b));
+            }
+        }
+        noteField.setText(i.getNote());
+        datePicker.setValue(i.getDate());
+        amountLabel.setText(formatMonetaryAmount(i.getAmount()));
+        positionOfEditItemInAppropriateList = positionOfItemInAppropriateList;
     }
 
     private void loadGUI() throws IOException {
@@ -75,17 +95,29 @@ public class ItemMenu extends Observable {
 
     private void loadCategories(Collection<Category> allCategories) {
         categoriesContainer.getChildren().clear();
+        allCategoryButtons.clear();
         int counter = 0;
         for (Category c : allCategories) {
             Button b = new Button(c.getName());
             b.setOnAction(this::choseCategory);
             categoriesContainer.add(b, counter % 4, counter / 4, 1, 1);
+            allCategoryButtons.add(b);
             counter++;
         }
     }
 
+    private void chooseItemType(String type) {
+        if (type.equals("Income")) {
+            itemTypeChoice.getSelectionModel().select(0);
+            loadCategories(budget.getIncomeCategories().values());
+        } else {
+            itemTypeChoice.getSelectionModel().select(1);
+            loadCategories(budget.getExpenseCategories().values());
+        }
+    }
+
     @FXML
-    private void chooseItemType() {
+    private void choseItemType() {
         enterInfoContainer.setVisible(false);
         if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
             loadCategories(budget.getIncomeCategories().values());
@@ -100,6 +132,12 @@ public class ItemMenu extends Observable {
         chosenCategory.setText("Category: " + b.getText());
         if (!enterInfoContainer.isVisible()) {
             enterInfoContainer.setVisible(true);
+        }
+        for (Button button : allCategoryButtons) {
+            button.setStyle(button.getStyle() + "-fx-background-color: #ffffff; -fx-text-fill: #000000;");
+            if (b.equals(button)) {
+                b.setStyle(b.getStyle() + "-fx-background-color: #930fff; -fx-text-fill: #ffffff;");
+            }
         }
     }
 
@@ -129,16 +167,38 @@ public class ItemMenu extends Observable {
             String newAmountString = "000" + currentAmountNoSymbols.substring(0, currentAmountNoSymbols.length() - 1);
             amountLabel.setText(formatNewAmount(newAmountString));
         } else if (b.getId().equals("okButton")) {
-            Double amount = Double.parseDouble(currentAmountNoSymbols); // TODO: change to long
-            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
-            LocalDate date = datePicker.getValue();
-            String note = noteField.getText();
-            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
-                //budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+            if (!editing) {
+                createItem();
             } else {
-                //budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+                editItem();
             }
-            //backToMainMenu();
+            backToMainMenu();
+        }
+    }
+
+    private void createItem() {
+        double amount = Double.parseDouble(amountLabel.getText().substring(1));
+        LocalDate date = datePicker.getValue();
+        String note = noteField.getText();
+        if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
+            budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+        } else {
+            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+            budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+        }
+    }
+
+    private void editItem() {
+        double amount = Double.parseDouble(amountLabel.getText().substring(1));
+        LocalDate date = datePicker.getValue();
+        String note = noteField.getText();
+        if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
+            budget.getAllIncomeItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
+        } else {
+            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+            budget.getAllExpenseItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
         }
     }
 

@@ -1,0 +1,128 @@
+/* GLOBAL PROPERTIES */
+.root {
+    -fx-font-family: 'Arial';
+}
+
+#mainContainer, #contentContainer {
+    -fx-background-color: #ffffff;
+}
+
+.button:hover {
+	-fx-cursor: hand;
+}
+
+/*
+.button {
+    -fx-padding: 5px 5px 5px 5px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 2px;
+    -fx-border-color: #930fff;
+}
+
+.button:hover {
+    -fx-text-fill: #ffffff;
+	-fx-background-color: #930fff;
+	-fx-cursor: hand;
+}
+*/
+
+/* TOP BAR */
+#topBar {
+    -fx-background-color: #930fff;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+#topBar .label {
+    -fx-text-fill: #ffffff;
+}
+
+#topBar .button {
+    -fx-padding: 1px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #930fff;
+}
+
+/* CONTENT CONTAINER */
+#contentContainer {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+}
+
+#contentContainer .separator {
+    -fx-padding: 10px 0 10px 0;
+}
+
+.sectionTitle {
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 5px 0;
+}
+
+/* YEAR/MONTH CHANGER */
+#changeYearButton {
+    -fx-background-color: #ffffff;
+}
+
+#monthGrid .button {
+    -fx-background-color: #ffffff;
+}
+
+/* SUMMARY FOR MONTH */
+#incomeAmount {
+    -fx-text-fill: #00e01a;
+}
+
+#expenseAmount {
+    -fx-text-fill: #e00422;
+}
+
+/* TRANSACTIONS */
+.transactionLineItem {
+    -fx-padding: 5px 0 0 0;
+    -fx-cursor: hand;
+}
+
+.transactionMonth {
+}
+
+.transactionDate {
+    -fx-font-size: 12px;
+}
+
+.transactionCategoryNote {
+    -fx-padding: 0 0 0 30px;
+}
+
+.transactionCategory {
+}
+
+.transactionNote {
+    -fx-font-size: 12px;
+}
+
+.transactionAmountIncome {
+    -fx-text-fill: #00e01a;
+}
+
+.transactionAmountExpense {
+    -fx-text-fill: #e00422;
+}
+
+/* BOTTOM BAR */
+#bottomBar {
+    -fx-background-color: #f7f7f7;
+}
+
+#bottomBar .button {
+    -fx-content-display: top;
+    -fx-background-color: transparent;
+}
+
+#selectedMenuButton {
+    -fx-text-fill: #930fff;
+}
+
+#notSelectedMenuButton {
+    -fx-text-fill: #c4c4c4;
+}

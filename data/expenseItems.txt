@@ -1,2 +1,3 @@
 50.0,Food,2019-10-14,
 10.99,Entertainment,2019-10-01,Netflix subscription
+2.5,Transportation,2019-11-05,Bus ticket

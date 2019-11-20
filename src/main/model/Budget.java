@@ -85,7 +85,7 @@ public class Budget implements Loadable, Saveable {
         allExpenseItems = parseItemFiles(load("expenseItems.txt"), "expense");
         allSubBudgets = parseSubBudgetFile(load("subBudgets.txt"));
 
-        System.out.println("Loading completed.");
+        System.out.println("Session data loading completed.");
         return true;
     }
 
@@ -98,14 +98,10 @@ public class Budget implements Loadable, Saveable {
             String categoryKey = splitLine[1];
             LocalDate date = LocalDate.parse(splitLine[2]);
             String note = splitLine[3];
-            try {
-                if (type.equals("income")) {
-                    parsedData.add(new IncomeItem(amount, incomeCategories.get(categoryKey), date, note));
-                } else {
-                    parsedData.add(new ExpenseItem(amount, expenseCategories.get(categoryKey), date, note));
-                }
-            } catch (NegativeMonetaryAmountException e) {
-                System.out.println("Error in parsing saved data. Monetary amount of an item is negative.");
+            if (type.equals("income")) {
+                parsedData.add(new IncomeItem(amount, incomeCategories.get(categoryKey), date, note));
+            } else {
+                parsedData.add(new ExpenseItem(amount, expenseCategories.get(categoryKey), date, note));
             }
         }
 
@@ -164,7 +160,7 @@ public class Budget implements Loadable, Saveable {
         save(parseItemsForSave(allExpenseItems), "expenseItems.txt");
         save(parseSubBudgetsForSave(allSubBudgets), "subBudgets.txt");
 
-        System.out.println("Saving completed.");
+        System.out.println("Session data saving completed.");
         return true;
     }
 

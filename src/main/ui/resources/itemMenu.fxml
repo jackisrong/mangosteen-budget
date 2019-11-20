@@ -24,7 +24,7 @@
         </HBox>
     </ToolBar>
 
-    <ChoiceBox fx:id="itemTypeChoice" onAction="#chooseItemType" value="Income" prefWidth="100">
+    <ChoiceBox fx:id="itemTypeChoice" onAction="#choseItemType" value="Income" prefWidth="100">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Income"/>

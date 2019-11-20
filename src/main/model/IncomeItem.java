@@ -6,8 +6,7 @@ import java.time.LocalDate;
 
 public class IncomeItem extends Item {
     // EFFECTS: creates new IncomeItem with specified fields
-    public IncomeItem(double amount, Category category, LocalDate date, String note)
-            throws NegativeMonetaryAmountException {
+    public IncomeItem(double amount, Category category, LocalDate date, String note) {
         super(amount, category, date, note);
     }
 
