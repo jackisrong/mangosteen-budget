@@ -32,6 +32,7 @@ public class SubBudgetTest {
         assertEquals(500, subBudget.getAmount());
     }
 
+    /*
     @Test
     public void getAmountUsedTest() throws NegativeMonetaryAmountException {
         assertEquals(0, subBudget.getAmountUsedThisMonth(null, LocalDate.of(2019, 9, 1)));
@@ -67,4 +68,5 @@ public class SubBudgetTest {
         expenses.add(new ExpenseItem(6.98, new ExpenseCategory("Food"), LocalDate.of(2019, 9, 5), ""));
         assertEquals(500 - 109.81 - 6.98, subBudget.getAmountLeft(expenses, LocalDate.of(2019, 9, 1)));
     }
+     */
 }

@@ -13,36 +13,32 @@ import model.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class ItemMenu extends Menu {
-    private MainMenu mainMenu;
-    private Boolean editing;
+public class ItemMenu extends CreationMenu {
+    private Menu previousMenu;
     private int positionOfEditItemInAppropriateList;
 
     @FXML
     private ChoiceBox itemTypeChoice;
     @FXML
-    private GridPane categoriesContainer;
-    private ArrayList<Button> allCategoryButtons = new ArrayList<Button>();
-    @FXML
-    private VBox enterInfoContainer;
-    @FXML
-    private Label chosenCategory;
-    @FXML
     private TextField noteField;
     @FXML
     private DatePicker datePicker;
-    @FXML
-    private Label amountLabel;
 
-    public ItemMenu(MainMenu mainMenu, Budget budget) {
-        this.mainMenu = mainMenu;
+    public ItemMenu(Budget budget) {
         this.budget = budget;
     }
 
-    public void run(Stage stage) {
+    @Override
+    protected void run(Stage stage) {
+        // do nothing
+    }
+
+    public void run(Stage stage, Menu previousMenu) {
         this.stage = stage;
+        this.previousMenu = previousMenu;
         editing = false;
         try {
             loadGUI();
@@ -52,8 +48,8 @@ public class ItemMenu extends Menu {
         }
     }
 
-    public void runEditItem(Stage stage, Item i, int positionOfItemInAppropriateList) {
-        run(stage);
+    public void runEditItem(Stage stage, Item i, int positionOfItemInAppropriateList, Menu previousMenu) {
+        run(stage, previousMenu);
         editing = true;
         if (i.getClass().getName().equals("model.IncomeItem")) {
             chooseItemType("Income");
@@ -89,21 +85,8 @@ public class ItemMenu extends Menu {
     }
 
     @FXML
-    private void backToMainMenu() {
-        mainMenu.run(stage);
-    }
-
-    private void loadCategories(Collection<Category> allCategories) {
-        categoriesContainer.getChildren().clear();
-        allCategoryButtons.clear();
-        int counter = 0;
-        for (Category c : allCategories) {
-            Button b = new Button(c.getName());
-            b.setOnAction(this::choseCategory);
-            categoriesContainer.add(b, counter % 4, counter / 4, 1, 1);
-            allCategoryButtons.add(b);
-            counter++;
-        }
+    protected void backToPreviousMenu() {
+        previousMenu.run(stage);
     }
 
     private void chooseItemType(String type) {
@@ -126,57 +109,7 @@ public class ItemMenu extends Menu {
         }
     }
 
-    @FXML
-    private void choseCategory(ActionEvent event) {
-        Button b = (Button) event.getSource();
-        chosenCategory.setText("Category: " + b.getText());
-        if (!enterInfoContainer.isVisible()) {
-            enterInfoContainer.setVisible(true);
-        }
-        for (Button button : allCategoryButtons) {
-            button.setStyle(button.getStyle() + "-fx-background-color: #ffffff; -fx-text-fill: #000000;");
-            if (b.equals(button)) {
-                b.setStyle(b.getStyle() + "-fx-background-color: #930fff; -fx-text-fill: #ffffff;");
-            }
-        }
-    }
-
-    private String getCurrentAmountWithoutSymbols() {
-        String currentAmount = amountLabel.getText().substring(1);
-        String currentAmountNoSymbols = currentAmount.substring(0, currentAmount.length() - 3)
-                + currentAmount.substring(currentAmount.length() - 2);
-        return currentAmountNoSymbols;
-    }
-
-    private String formatNewAmount(String newAmountString) {
-        DecimalFormat df = new DecimalFormat("#0.00");
-        double newAmount = Double.parseDouble(newAmountString.substring(0, newAmountString.length() - 2)
-                + "." + newAmountString.substring(newAmountString.length() - 2));
-        return "$" + df.format(newAmount);
-    }
-
-    @FXML
-    private void amountNumberPadPressed(ActionEvent event) {
-        Button b = (Button) event.getSource();
-        String currentAmountNoSymbols = getCurrentAmountWithoutSymbols();
-        if (b.getId() == null) {
-            long currentAmountInteger = Long.parseLong(currentAmountNoSymbols);
-            String newAmountString = "000" + (currentAmountInteger * 10 + Integer.parseInt(b.getText()));
-            amountLabel.setText(formatNewAmount(newAmountString));
-        } else if (b.getId().equals("backButton")) {
-            String newAmountString = "000" + currentAmountNoSymbols.substring(0, currentAmountNoSymbols.length() - 1);
-            amountLabel.setText(formatNewAmount(newAmountString));
-        } else if (b.getId().equals("okButton")) {
-            if (!editing) {
-                createItem();
-            } else {
-                editItem();
-            }
-            backToMainMenu();
-        }
-    }
-
-    private void createItem() {
+    protected void createItem() {
         double amount = Double.parseDouble(amountLabel.getText().substring(1));
         LocalDate date = datePicker.getValue();
         String note = noteField.getText();
@@ -189,7 +122,7 @@ public class ItemMenu extends Menu {
         }
     }
 
-    private void editItem() {
+    protected void editItem() {
         double amount = Double.parseDouble(amountLabel.getText().substring(1));
         LocalDate date = datePicker.getValue();
         String note = noteField.getText();

@@ -19,19 +19,10 @@
         <HBox prefWidth="300" alignment="CENTER">
             <Button text="&#x1f860;" onAction="#backToPreviousMenu"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Create Item"/>
+            <Label text="Create Budget"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </ToolBar>
-
-    <ChoiceBox fx:id="itemTypeChoice" onAction="#choseItemType" value="Income" prefWidth="100">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Income"/>
-                <String fx:value="Expense"/>
-            </FXCollections>
-        </items>
-    </ChoiceBox>
 
     <ScrollPane fitToWidth="true">
         <GridPane fx:id="categoriesContainer" hgap="5" vgap="5">
@@ -47,8 +38,7 @@
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="amountLabel" text="\$0.00"/>
         </HBox>
-        <TextField fx:id="noteField" promptText="Write a Note (optional)"/>
-        <DatePicker fx:id="datePicker" promptText="Choose Date" prefWidth="Infinity"/>
+        <TextField fx:id="noteField" promptText="Write a Subcategory or Note (optional)"/>
         <HBox>
             <Button styleClass="numberPadButton" text="7" onAction="#amountNumberPadPressed"/>
             <Button styleClass="numberPadButton" text="8" onAction="#amountNumberPadPressed"/>

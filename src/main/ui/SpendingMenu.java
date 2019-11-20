@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -221,12 +220,22 @@ public class SpendingMenu extends Menu {
             Category c = budget.getExpenseCategories().get(((Label) categoryNoteBox.getChildren().get(0)).getText());
             i = new ExpenseItem(amount, c, date, note);
         }
-        itemMenu.runEditItem(stage, i, positionOfItemInAppropriateList);
+        itemMenu.runEditItem(stage, i, positionOfItemInAppropriateList, this);
+    }
+
+    @FXML
+    private void addItem() {
+        itemMenu.run(stage, this);
     }
 
     @FXML
     private void viewMain() {
         mainMenu.run(stage);
+    }
+
+    @FXML
+    private void viewBudgets() {
+        mainMenu.viewBudgets();
     }
 }
 

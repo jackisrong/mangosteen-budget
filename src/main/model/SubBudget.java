@@ -35,7 +35,8 @@ public class SubBudget {
     }
 
     // EFFECTS: returns total amount of expenses in category in this month
-    public double getAmountUsedThisMonth(ArrayList<Item> allExpenseItems, LocalDate currentDate) {
+    public double getAmountUsedThisMonth(ArrayList<Item> allExpenseItems) {
+        LocalDate currentDate = LocalDate.now();
         double amountAdder = 0;
         if (allExpenseItems != null) {
             for (Item i : allExpenseItems) {
@@ -50,7 +51,7 @@ public class SubBudget {
     }
 
     // EFFECTS: returns amount of money left to spend in category to say in budget in this month
-    public double getAmountLeft(ArrayList<Item> allExpenseItems, LocalDate currentDate) {
-        return amount - getAmountUsedThisMonth(allExpenseItems, currentDate);
+    public double getAmountLeft(ArrayList<Item> allExpenseItems) {
+        return amount - getAmountUsedThisMonth(allExpenseItems);
     }
 }

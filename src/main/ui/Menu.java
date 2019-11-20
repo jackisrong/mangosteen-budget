@@ -16,6 +16,8 @@ public abstract class Menu {
     protected Scene scene;
     protected Budget budget = new Budget();
 
+    protected abstract void run(Stage stage);
+
     protected int getCurrentYear() {
         return LocalDate.now().getYear();
     }

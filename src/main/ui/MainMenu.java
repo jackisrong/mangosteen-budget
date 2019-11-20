@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MainMenu extends Menu {
-    private ItemMenu itemMenu = new ItemMenu(this, budget);
+    private ItemMenu itemMenu = new ItemMenu(budget);
     private SpendingMenu spendingMenu = new SpendingMenu(this, itemMenu, budget);
-    private SubBudgetMenu subBudgetMenu = new SubBudgetMenu(budget);
+    private SubBudgetMenu subBudgetMenu = new SubBudgetMenu(this, budget);
 
     @FXML
     private Label quoteContent;
@@ -115,13 +115,18 @@ public class MainMenu extends Menu {
     }
 
     @FXML
-    private void addItem() {
-        itemMenu.run(stage);
+    public void addItem() {
+        itemMenu.run(stage, this);
     }
 
     @FXML
-    private void viewSpending() {
+    public void viewSpending() {
         spendingMenu.run(stage);
+    }
+
+    @FXML
+    public void viewBudgets() {
+        subBudgetMenu.run(stage);
     }
 
     @FXML

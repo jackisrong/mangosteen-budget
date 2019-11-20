@@ -3,3 +3,4 @@
 607.68,Investments,2019-10-05,Apple stocks
 500.0,Salary,2019-11-05,October salary
 1025.6,Investments,2019-11-15,Apple stocks
+102.0,Investments,2019-11-20,
