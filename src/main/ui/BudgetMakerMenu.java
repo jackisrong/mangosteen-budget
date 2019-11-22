@@ -24,8 +24,6 @@ public class BudgetMakerMenu extends CreationMenu {
     private GridPane categoriesContainer;
     @FXML
     private VBox enterInfoContainer;
-    @FXML
-    private TextField noteField;
 
     public BudgetMakerMenu(SubBudgetMenu subBudgetMenu, Budget budget) {
         this.subBudgetMenu = subBudgetMenu;
@@ -50,9 +48,9 @@ public class BudgetMakerMenu extends CreationMenu {
         for (Button b : allCategoryButtons) {
             if (b.getText().equals(s.getCategoryName())) {
                 choseCategory(new ActionEvent(b, b));
+                b.setDisable(false);
             }
         }
-        noteField.setText(s.getNote());
         amountLabel.setText(formatMonetaryAmount(s.getAmount()));
         positionOfEditItemInAppropriateList = positionOfItemInAppropriateList;
     }
@@ -72,6 +70,7 @@ public class BudgetMakerMenu extends CreationMenu {
     @FXML
     private void initialize() {
         loadCategories(budget.getExpenseCategories().values());
+        disableCategoriesAlreadyWithSubBudget();
     }
 
     @FXML
@@ -79,19 +78,29 @@ public class BudgetMakerMenu extends CreationMenu {
         subBudgetMenu.run(stage);
     }
 
+    @FXML
+    private void disableCategoriesAlreadyWithSubBudget() {
+        for (Button b : allCategoryButtons) {
+            for (SubBudget s : budget.getAllSubBudgets()) {
+                if (s.getCategoryName().equals(b.getText())) {
+                    b.setDisable(true);
+                }
+            }
+        }
+    }
+
     @Override
     protected void createItem() {
         Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
         double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        String note = noteField.getText();
-        budget.addToAllSubBudgets(new SubBudget(category, amount, note));
+        budget.addToAllSubBudgets(new SubBudget(category, amount));
     }
 
     @Override
     protected void editItem() {
         Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
         double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        String note = noteField.getText();
-        budget.getAllSubBudgets().get(positionOfEditItemInAppropriateList).edit(category, amount, note);
+        ;
+        budget.getAllSubBudgets().get(positionOfEditItemInAppropriateList).edit(category, amount);
     }
 }

@@ -1,3 +1,4 @@
-Entertainment,50.0,
-Food,90.0,Groceries
-Bills,50.0,Electricity
+Entertainment,50.0
+Food,100.0
+Transportation,50.0
+Clothing,82.0

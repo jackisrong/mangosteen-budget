@@ -43,8 +43,8 @@ public class BudgetTest {
     @Test
     public void getAddToAllSubBudgetsTest() {
         assertEquals(0, budget.getAllSubBudgets().size());
-        budget.addToAllSubBudgets(new SubBudget(new ExpenseCategory("Food"), 300, ""));
-        budget.addToAllSubBudgets(new SubBudget(new ExpenseCategory("Entertainment"), 100, ""));
+        budget.addToAllSubBudgets(new SubBudget(new ExpenseCategory("Food"), 300));
+        budget.addToAllSubBudgets(new SubBudget(new ExpenseCategory("Entertainment"), 100));
         assertEquals(2, budget.getAllSubBudgets().size());
     }
 
@@ -141,15 +141,15 @@ public class BudgetTest {
     @Test
     public void parseSubBudgetsForSaveTest() {
         ArrayList<SubBudget> items = new ArrayList<SubBudget>();
-        items.add(new SubBudget(new ExpenseCategory("Transportation"), 100.0, "Bus"));
-        items.add(new SubBudget(new ExpenseCategory("Food"), 259.1, ""));
-        items.add(new SubBudget(new ExpenseCategory("Savings"), 19.99, ""));
+        items.add(new SubBudget(new ExpenseCategory("Transportation"), 100.0));
+        items.add(new SubBudget(new ExpenseCategory("Food"), 259.1));
+        items.add(new SubBudget(new ExpenseCategory("Savings"), 19.99));
 
         ArrayList<String> parsed = budget.parseSubBudgetsForSave(items);
         assertEquals(3, parsed.size());
 
-        assertEquals("Transportation,100.0,Bus", parsed.get(0));
-        assertEquals("Food,259.1,", parsed.get(1));
-        assertEquals("Savings,19.99,", parsed.get(2));
+        assertEquals("Transportation,100.0", parsed.get(0));
+        assertEquals("Food,259.1", parsed.get(1));
+        assertEquals("Savings,19.99", parsed.get(2));
     }
 }

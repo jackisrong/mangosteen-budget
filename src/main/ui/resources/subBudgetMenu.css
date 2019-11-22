@@ -62,11 +62,11 @@
 
 .budgetTitle {
     -fx-font-weight: bold;
+    -fx-padding: 0 0 5px 0;
 }
 
-.budgetSubHeading {
+.budgetAmountLeft {
     -fx-font-size: 12px;
-    -fx-padding: 0 0 5px 0;
 }
 
 .progressBarContainer {

@@ -11,6 +11,10 @@
 	-fx-cursor: hand;
 }
 
+.button:disabled .text {
+    -fx-strikethrough: true;
+}
+
 /* TOP BAR */
 #topBar {
     -fx-background-color: #930fff;

@@ -6,13 +6,11 @@ import java.util.ArrayList;
 public class SubBudget {
     private Category category;
     private double amount;
-    private String note;
 
     // EFFECTS: creates new SubBudget with specified fields
-    public SubBudget(Category category, double amount, String note) {
+    public SubBudget(Category category, double amount) {
         this.category = category;
         this.amount = amount;
-        this.note = note;
     }
 
     // EFFECTS: returns category of sub-budget
@@ -30,17 +28,11 @@ public class SubBudget {
         return amount;
     }
 
-    // EFFECTS: returns note/subcategory of sub-budget
-    public String getNote() {
-        return note;
-    }
-
     // MODIFIES: this
     // EFFECTS: sets amount to be newAmount
-    public void edit(Category category, double amount, String note) {
+    public void edit(Category category, double amount) {
         this.category = category;
         this.amount = amount;
-        this.note = note;
     }
 
     // EFFECTS: returns total amount of expenses in category in this month
