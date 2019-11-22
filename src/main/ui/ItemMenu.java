@@ -18,7 +18,6 @@ import java.util.Collection;
 
 public class ItemMenu extends CreationMenu {
     private Menu previousMenu;
-    private int positionOfEditItemInAppropriateList;
 
     @FXML
     private ChoiceBox itemTypeChoice;

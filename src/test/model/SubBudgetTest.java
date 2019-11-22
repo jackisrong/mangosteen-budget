@@ -14,7 +14,7 @@ public class SubBudgetTest {
 
     @BeforeEach
     public void setup() {
-        subBudget = new SubBudget(new ExpenseCategory("Food"), 500);
+        subBudget = new SubBudget(new ExpenseCategory("Food"), 500, "Groceries");
     }
 
     @Test
@@ -30,6 +30,11 @@ public class SubBudgetTest {
     @Test
     public void getAmountTest() {
         assertEquals(500, subBudget.getAmount());
+    }
+
+    @Test
+    public void getNoteTest() {
+        assertEquals("Groceries", subBudget.getNote());
     }
 
     /*

@@ -9,8 +9,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import model.Budget;
-import model.SubBudget;
+import model.*;
 
 import java.io.IOException;
 
@@ -62,14 +61,14 @@ public class SubBudgetMenu extends Menu {
         budgetMakerMenu.run(stage);
     }
 
-    private HBox createBudgetLineHeading(SubBudget s) {
-        Label title = new Label(s.getCategoryName());
-        title.getStyleClass().add("budgetTitle");
+    private HBox createBudgetSubHeading(SubBudget s) {
+        Label note = new Label(s.getNote());
+        note.getStyleClass().add("budgetSubHeading");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         Label amountLeft = new Label(formatMonetaryAmount(s.getAmountLeft(budget.getAllExpenseItems())) + " left");
-        amountLeft.getStyleClass().add("budgetAmountLeft");
-        return new HBox(title, spacer, amountLeft);
+        amountLeft.getStyleClass().add("budgetSubHeading");
+        return new HBox(note, spacer, amountLeft);
     }
 
     private StackPane createBudgetLineProgress(SubBudget s) {
@@ -97,17 +96,31 @@ public class SubBudgetMenu extends Menu {
             contentContainer.getChildren().clear();
         }
         for (SubBudget s : budget.getAllSubBudgets()) {
-            VBox vbox = new VBox(createBudgetLineHeading(s), createBudgetLineProgress(s));
+            Label title = new Label(s.getCategoryName());
+            title.getStyleClass().add("budgetTitle");
+            VBox vbox = new VBox(title, createBudgetSubHeading(s), createBudgetLineProgress(s));
             vbox.getStyleClass().add("budgetItem");
             vbox.setOnMouseClicked(this::budgetClicked);
             Tooltip tooltip = new Tooltip("Edit this budget");
             Tooltip.install(vbox, tooltip);
+            Label positionOfItemInListLabel = new Label(Integer.toString(budget.getAllSubBudgets().indexOf(s)));
+            positionOfItemInListLabel.setManaged(false);
+            vbox.getChildren().add(positionOfItemInListLabel);
             contentContainer.getChildren().add(vbox);
         }
     }
 
     private void budgetClicked(MouseEvent mouseEvent) {
-
+        VBox vbox = (VBox) mouseEvent.getSource();
+        HBox categoryNoteBox = (HBox) vbox.getChildren().get(1);
+        StackPane amountBox = (StackPane) vbox.getChildren().get(2);
+        String note = ((Label) categoryNoteBox.getChildren().get(0)).getText();
+        String progressBarAmountText = ((Label) amountBox.getChildren().get(1)).getText();
+        double amount = Double.parseDouble(progressBarAmountText.substring(progressBarAmountText.indexOf("of") + 4));
+        int positionOfItemInAppropriateList = Integer.parseInt(((Label) vbox.getChildren().get(3)).getText());
+        Category c = budget.getExpenseCategories().get(((Label) vbox.getChildren().get(0)).getText());
+        SubBudget s = new SubBudget(c, amount, note);
+        budgetMakerMenu.runEditItem(stage, s, positionOfItemInAppropriateList);
     }
 
 

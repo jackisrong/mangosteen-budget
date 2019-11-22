@@ -19,6 +19,7 @@
     <ScrollPane fitToWidth="true">
         <VBox fx:id="contentContainer">
             <Label text="You haven't created any budgets yet"/>
+            <!--
             <VBox>
                 <HBox>
                     <Label styleClass="budgetTitle" text="January 2019"/>
@@ -30,6 +31,7 @@
                     <Label text="\$50.00 of $1300.00"/>
                 </StackPane>
             </VBox>
+            -->
         </VBox>
     </ScrollPane>
     <Region VBox.vgrow="ALWAYS"/>

@@ -14,6 +14,7 @@ import java.util.Collection;
 
 public abstract class CreationMenu extends Menu {
     protected Boolean editing = false;
+    protected int positionOfEditItemInAppropriateList;
 
     @FXML
     protected GridPane categoriesContainer;
@@ -90,6 +91,8 @@ public abstract class CreationMenu extends Menu {
     }
 
     protected abstract void createItem();
+
     protected abstract void editItem();
+
     protected abstract void backToPreviousMenu();
 }

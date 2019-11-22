@@ -112,11 +112,12 @@ public class Budget implements Loadable, Saveable {
     public ArrayList<SubBudget> parseSubBudgetFile(List<String> content) {
         ArrayList<SubBudget> parsedData = new ArrayList<SubBudget>();
         for (String rawLine : content) {
-            String[] splitLine = rawLine.split(",");
+            String[] splitLine = rawLine.split(",", 3);
             String categoryKey = splitLine[0];
             double amount = Double.parseDouble(splitLine[1]);
+            String note = splitLine[2];
             Category category = expenseCategories.get(categoryKey);
-            parsedData.add(new SubBudget(category, amount));
+            parsedData.add(new SubBudget(category, amount, note));
         }
 
         return parsedData;
@@ -177,7 +178,7 @@ public class Budget implements Loadable, Saveable {
     public ArrayList<String> parseSubBudgetsForSave(ArrayList<SubBudget> subBudgets) {
         ArrayList<String> parsedData = new ArrayList<String>();
         for (SubBudget i : subBudgets) {
-            parsedData.add(i.getCategoryName() + "," + i.getAmount());
+            parsedData.add(i.getCategoryName() + "," + i.getAmount() + "," + i.getNote());
         }
         return parsedData;
     }

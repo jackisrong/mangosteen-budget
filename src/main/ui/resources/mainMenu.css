@@ -53,8 +53,8 @@
 }
 
 /* PIE CHARTS */
-.chart-pie {
-    -fx-font-size: 13px;
+.chart {
+    -fx-font-size: 11px;
 }
 
 /* BOTTOM BAR */
