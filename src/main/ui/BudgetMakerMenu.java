@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -74,7 +76,7 @@ public class BudgetMakerMenu extends CreationMenu {
     }
 
     @FXML
-    protected void backToPreviousMenu() {
+    private void backToPreviousMenu() {
         subBudgetMenu.run(stage);
     }
 
@@ -91,16 +93,51 @@ public class BudgetMakerMenu extends CreationMenu {
 
     @Override
     protected void createItem() {
-        Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
-        double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        budget.addToAllSubBudgets(new SubBudget(category, amount));
+        if (!checkAmountGreaterThanZero()) {
+            showAmountZeroNoCreationWarning();
+        } else {
+            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+            double amount = Double.parseDouble(amountLabel.getText().substring(1));
+            budget.addToAllSubBudgets(new SubBudget(category, amount));
+            backToPreviousMenu();
+        }
     }
 
     @Override
     protected void editItem() {
-        Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
-        double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        ;
-        budget.getAllSubBudgets().get(positionOfEditItemInAppropriateList).edit(category, amount);
+        if (!checkAmountGreaterThanZero()) {
+            showAmountZeroDeletionWarning();
+        } else {
+            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+            double amount = Double.parseDouble(amountLabel.getText().substring(1));
+            budget.getAllSubBudgets().get(positionOfEditItemInAppropriateList).edit(category, amount);
+            backToPreviousMenu();
+        }
+    }
+
+    private void showAmountZeroNoCreationWarning() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Budget Creation");
+        alert.setHeaderText("Budget will not be created");
+        alert.setContentText("The amount is $0.00 so the budget will not be created. Continue?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            backToPreviousMenu();
+        } else {
+            alert.close();
+        }
+    }
+
+    private void showAmountZeroDeletionWarning() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Budget Deletion");
+        alert.setHeaderText("Budget will be deleted");
+        alert.setContentText("The amount is $0.00 so the budget will be deleted. Continue?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            budget.getAllSubBudgets().remove(positionOfEditItemInAppropriateList);
+        } else {
+            alert.close();
+        }
     }
 }

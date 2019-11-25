@@ -5,16 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class ItemMenu extends CreationMenu {
     private Menu previousMenu;
@@ -81,10 +77,11 @@ public class ItemMenu extends CreationMenu {
     @FXML
     private void initialize() {
         loadCategories(budget.getIncomeCategories().values());
+        datePicker.setValue(LocalDate.now());
     }
 
     @FXML
-    protected void backToPreviousMenu() {
+    private void backToPreviousMenu() {
         previousMenu.run(stage);
     }
 
@@ -109,149 +106,87 @@ public class ItemMenu extends CreationMenu {
     }
 
     protected void createItem() {
-        double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        LocalDate date = datePicker.getValue();
-        String note = noteField.getText();
-        if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
-            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
-            budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+        if (!checkAmountGreaterThanZero()) {
+            showAmountZeroNoCreationWarning();
+        } else if (!checkDateFilledIn()) {
+            showNoDateWarning();
         } else {
-            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
-            budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+            double amount = Double.parseDouble(amountLabel.getText().substring(1));
+            LocalDate date = datePicker.getValue();
+            String note = noteField.getText();
+            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+                Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
+                budget.addToAllIncomeItems(new IncomeItem(amount, category, date, note));
+            } else {
+                Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+                budget.addToAllExpenseItems(new ExpenseItem(amount, category, date, note));
+            }
+            backToPreviousMenu();
         }
     }
 
     protected void editItem() {
-        double amount = Double.parseDouble(amountLabel.getText().substring(1));
-        LocalDate date = datePicker.getValue();
-        String note = noteField.getText();
-        if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
-            Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
-            budget.getAllIncomeItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
+        if (!checkAmountGreaterThanZero()) {
+            showAmountZeroDeletionWarning((String) itemTypeChoice.getSelectionModel().getSelectedItem());
+        } else if (!checkDateFilledIn()) {
+            showNoDateWarning();
         } else {
-            Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
-            budget.getAllExpenseItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
-        }
-    }
-
-
-    /*
-    private void createItemGetValues(String type) {
-        System.out.println("How much is your " + type + "? (Enter an amount)");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.println("Where is your " + type + " from? (Enter a category)");
-        String categoryKey = scanner.nextLine();
-        System.out.println("When is your " + type + " from? (Enter a date in format YYYY MM DD)");
-        int year = scanner.nextInt();
-        int month = scanner.nextInt();
-        int day = scanner.nextInt();
-        scanner.nextLine();
-        LocalDate date = LocalDate.of(year, month, day);
-        System.out.println("Any additional info? (Enter a note)");
-        String note = scanner.nextLine();
-    }
-
-    private void createItem(double amount, Category category, LocalDate date, String note, String type) {
-        try {
-            Item i;
-            if (type.equals("income")) {
-                i = new IncomeItem(amount, category, date, note);
-                budget.addToAllIncomeItems(i);
+            double amount = Double.parseDouble(amountLabel.getText().substring(1));
+            LocalDate date = datePicker.getValue();
+            String note = noteField.getText();
+            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+                Category category = budget.getIncomeCategories().get(chosenCategory.getText().substring(10));
+                budget.getAllIncomeItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
             } else {
-                i = new ExpenseItem(amount, category, date, note);
-                budget.addToAllExpenseItems(i);
+                Category category = budget.getExpenseCategories().get(chosenCategory.getText().substring(10));
+                budget.getAllExpenseItems().get(positionOfEditItemInAppropriateList).edit(amount, category, date, note);
             }
-        } catch (NegativeMonetaryAmountException e) {
-            System.out.println("Invalid monetary amount! Your amount is negative!");
-        } finally {
-            System.out.println("Item creation process has finished.");
+            backToPreviousMenu();
         }
     }
 
-    public void displayAllItems() {
-        System.out.println("--------------------");
-        System.out.println("Income Items");
-        displayAllItemsInList(budget.getAllIncomeItems());
-        System.out.println("--------------------");
-        System.out.println("Expense Items");
-        displayAllItemsInList(budget.getAllExpenseItems());
-        System.out.println("--------------------");
-    }
-
-    public void editItemChooseType() {
-        System.out.println("Which item would you like to edit?");
-        System.out.println("[1] Income item");
-        System.out.println("[2] Expense item");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        if (choice == 1) {
-            displayAllItemsInList(budget.getAllIncomeItems());
-            editItem(budget.getAllIncomeItems(), "income");
+    private void showAmountZeroNoCreationWarning() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Item Creation");
+        alert.setHeaderText("Item will not be created");
+        alert.setContentText("The amount is $0.00 so the item will not be created. Continue?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            backToPreviousMenu();
         } else {
-            displayAllItemsInList(budget.getAllExpenseItems());
-            editItem(budget.getAllExpenseItems(), "expense");
+            alert.close();
         }
     }
 
-    private void editItem(ArrayList<Item> items, String type) {
-        System.out.println("Which item would you like to change? (Enter the item number)");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choice < items.size()) {
-            System.out.println("What would you like to change?");
-            System.out.println("[1] Amount");
-            System.out.println("[2] Category");
-            System.out.println("[3] Date");
-            System.out.println("[4] Note");
-            int fieldChoice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (fieldChoice >= 1 && fieldChoice <= 4) {
-                editCorrectItemField(items.get(choice), fieldChoice, type);
+    private void showAmountZeroDeletionWarning(String type) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Item Deletion");
+        alert.setHeaderText("Item will be deleted");
+        alert.setContentText("The amount is $0.00 so the item will be deleted. Continue?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+                budget.getAllIncomeItems().remove(positionOfEditItemInAppropriateList);
+            } else {
+                budget.getAllExpenseItems().remove(positionOfEditItemInAppropriateList);
             }
         } else {
-            System.out.println("That's an invalid item!");
+            alert.close();
         }
     }
 
-    private void editCorrectItemField(Item item, int fieldChoice, String type) {
-        System.out.println("Enter new value:");
-        if (fieldChoice == 1) {
-            double newAmount = scanner.nextDouble();
-            scanner.nextLine();
-            try {
-                item.changeAmount(newAmount);
-            } catch (NegativeMonetaryAmountException e) {
-                System.out.println("Invalid monetary amount!  Your amount is negative!");
-            }
-        } else if (fieldChoice == 2) {
-            String newCategory = scanner.nextLine();
-            item.changeCategory(changeCategory(newCategory, type));
-        } else if (fieldChoice == 3) {
-            item.changeDate(changeDate());
-        } else if (fieldChoice == 4) {
-            String newNote = scanner.nextLine();
-            item.changeNote(newNote);
+    private void showNoDateWarning() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("No Date");
+        alert.setHeaderText("Missing date field");
+        alert.setContentText("Please enter a date!");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
         }
     }
 
-    private Category changeCategory(String newCategory, String type) {
-        if (type.equals("income")) {
-            return budget.getIncomeCategories().get(newCategory);
-        } else {
-            return budget.getExpenseCategories().get(newCategory);
-        }
+    private boolean checkDateFilledIn() {
+        return !(datePicker.getValue() == null);
     }
-
-    private LocalDate changeDate() {
-        System.out.println("Use format YYYY MM DD");
-        int year = scanner.nextInt();
-        int month = scanner.nextInt();
-        int day = scanner.nextInt();
-        scanner.nextLine();
-        return LocalDate.of(year, month, day);
-    }
-     */
 }

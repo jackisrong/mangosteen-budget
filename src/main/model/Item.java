@@ -1,7 +1,5 @@
 package model;
 
-import exceptions.NegativeMonetaryAmountException;
-
 import java.time.LocalDate;
 
 public abstract class Item {
@@ -18,6 +16,7 @@ public abstract class Item {
     }
 
     // EFFECTS: checks if monetary amount given is valid
+    /*
     private boolean checkMonetaryValidity(double a) throws NegativeMonetaryAmountException {
         if (a < 0) {
             throw new NegativeMonetaryAmountException();
@@ -25,6 +24,7 @@ public abstract class Item {
 
         return true;
     }
+     */
 
     // MODIFIES: this
     // EFFECTS: reflexive relationship (one-to-many) - set category, then add this item into category's list of items
@@ -105,7 +105,4 @@ public abstract class Item {
         note = newNote;
     }
      */
-
-    // EFFECTS: prints a user-friendly sentence of item details
-    public abstract String viewItem();
 }

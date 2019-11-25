@@ -7,4 +7,4 @@
 12.99,Entertainment,2019-11-13,watching IT 2 in theaters
 10.0,Transportation,2019-11-21,3 zone pass
 84.59,Food,2019-11-19,Groceries for the week
-38.25,Clothing,2019-11-17,New clothes from Uniqlo
+34.58,Clothing,2019-11-19,New clothes

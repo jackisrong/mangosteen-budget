@@ -2,15 +2,19 @@ package ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.Category;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 public abstract class CreationMenu extends Menu {
     protected Boolean editing = false;
@@ -86,13 +90,16 @@ public abstract class CreationMenu extends Menu {
             } else {
                 editItem();
             }
-            backToPreviousMenu();
         }
     }
+
+    protected boolean checkAmountGreaterThanZero() {
+        return !amountLabel.getText().equals("$0.00");
+    }
+
+    // TODO: create check to see if number they're entering is too high for double type
 
     protected abstract void createItem();
 
     protected abstract void editItem();
-
-    protected abstract void backToPreviousMenu();
 }

@@ -133,39 +133,4 @@ public class MainMenu extends Menu {
     public void save() {
         budget.saveAllExistingData();
     }
-
-    /*
-    private void displayChoices() {
-        System.out.println("What would you like to do?");
-        System.out.println("[1] Add income or expense item");
-        System.out.println("[2] Display all income and expense items");
-        System.out.println("[3] Edit an income or expense item");
-        System.out.println("[4] Create a monthly sub-budget to track money spent on individual categories");
-        System.out.println("[5] View sub-budgets");
-        System.out.println("[6] Edit a sub-budget's amount");
-        System.out.println("[7] FOR TESTING ONLY: View all items in each category");
-        System.out.println("[other] Save and quit");
-    }
-
-    private boolean runAppropriateFunctionBasedOnChoice(int choice) {
-        if (choice == 1) {
-            itemMenu.createItemPrompt();
-        } else if (choice == 2) {
-            itemMenu.displayAllItems();
-        } else if (choice == 3) {
-            itemMenu.editItemChooseType();
-        } else if (choice == 4) {
-            subBudgetMenu.createSubBudget();
-        } else if (choice == 5) {
-            subBudgetMenu.viewSubBudgets();
-        } else if (choice == 6) {
-            subBudgetMenu.changeSubBudgetAmount();
-        } else if (choice == 7) {
-            //itemMenu.viewAllItemsInAllCategories();
-        } else {
-            return false;
-        }
-        return true;
-    }
-     */
 }
