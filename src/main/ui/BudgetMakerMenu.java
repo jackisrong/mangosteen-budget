@@ -7,17 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Budget;
 import model.Category;
-import model.Item;
 import model.SubBudget;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class BudgetMakerMenu extends CreationMenu {
     private SubBudgetMenu subBudgetMenu;
@@ -27,12 +24,15 @@ public class BudgetMakerMenu extends CreationMenu {
     @FXML
     private VBox enterInfoContainer;
 
+    // MODIFIES: this
+    // EFFECTS: create new BudgetMakerMenu with specified fields
     public BudgetMakerMenu(SubBudgetMenu subBudgetMenu, Budget budget) {
         this.subBudgetMenu = subBudgetMenu;
         this.budget = budget;
     }
 
     @Override
+    // EFFECTS: do run actions and load GUI
     protected void run(Stage stage) {
         this.stage = stage;
         editing = false;
@@ -44,6 +44,7 @@ public class BudgetMakerMenu extends CreationMenu {
         }
     }
 
+    // EFFECTS: do run actions and set appropriate settings for editing chosen sub-budget
     public void runEditItem(Stage stage, SubBudget s, int positionOfItemInAppropriateList) {
         run(stage);
         editing = true;
@@ -92,6 +93,7 @@ public class BudgetMakerMenu extends CreationMenu {
     }
 
     @Override
+    // EFFECTS: check for error cases, create new sub-budget
     protected void createItem() {
         if (!checkAmountGreaterThanZero()) {
             showAmountZeroNoCreationWarning();
@@ -104,6 +106,7 @@ public class BudgetMakerMenu extends CreationMenu {
     }
 
     @Override
+    // EFFECTS: check for error cases, edit chosen sub-budget
     protected void editItem() {
         if (!checkAmountGreaterThanZero()) {
             showAmountZeroDeletionWarning();
@@ -136,6 +139,7 @@ public class BudgetMakerMenu extends CreationMenu {
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
             budget.getAllSubBudgets().remove(positionOfEditItemInAppropriateList);
+            backToPreviousMenu();
         } else {
             alert.close();
         }

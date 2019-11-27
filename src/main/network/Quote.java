@@ -12,6 +12,7 @@ public class Quote {
     private String quoteContent;
     private String quoteAuthor;
 
+    // EFFECTS: create new quote and parse quote
     public Quote() {
         parseQuote();
     }
@@ -37,6 +38,8 @@ public class Quote {
         return sb.toString();
     }
 
+    // MODIFIES: this
+    // EFFECTS: get a random quote then parse the JSON and sets fields
     public void parseQuote() {
         String json = "";
         try {
@@ -56,10 +59,12 @@ public class Quote {
         }
     }
 
+    // EFFECTS: returns quote contents
     public String getQuoteContent() {
         return quoteContent;
     }
 
+    // EFFECTS: returns quote author
     public String getQuoteAuthor() {
         return quoteAuthor;
     }

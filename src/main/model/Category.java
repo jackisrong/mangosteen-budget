@@ -8,6 +8,8 @@ public abstract class Category {
     protected String name;
     protected ArrayList<Item> itemsInCategory = new ArrayList<Item>();
 
+    // MODIFIES: this
+    // EFFECTS: creates new Category with name name
     public Category(String name) {
         this.name = name;
     }
@@ -30,14 +32,17 @@ public abstract class Category {
         }
     }
 
+    // EFFECTS: returns category's name
     public String getName() {
         return name;
     }
 
+    // EFFECTS: returns all items currently in category
     public ArrayList<Item> getAllItems() {
         return itemsInCategory;
     }
 
+    // EFFECTS: returns total amount of all items currently in category
     public double getAllItemAmountTotal() {
         double total = 0.0;
         for (Item i : itemsInCategory) {
@@ -46,6 +51,7 @@ public abstract class Category {
         return total;
     }
 
+    // EFFECTS: returns total amount of all items currently in category from current month
     public double getAllItemAmountThisMonthTotal() {
         double total = 0.0;
         int year = LocalDate.now().getYear();

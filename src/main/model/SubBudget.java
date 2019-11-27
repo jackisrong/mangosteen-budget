@@ -1,12 +1,10 @@
 package model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 public class SubBudget {
     private Category category;
     private double amount;
 
+    // MODIFIES: this
     // EFFECTS: creates new SubBudget with specified fields
     public SubBudget(Category category, double amount) {
         this.category = category;
@@ -35,24 +33,13 @@ public class SubBudget {
         this.amount = amount;
     }
 
-    // EFFECTS: returns total amount of expenses in category in this month
-    public double getAmountUsedThisMonth(ArrayList<Item> allExpenseItems) {
-        LocalDate currentDate = LocalDate.now();
-        double amountAdder = 0;
-        if (allExpenseItems != null) {
-            for (Item i : allExpenseItems) {
-                if (i.getCategory().equals(category)
-                        && i.getDate().getMonthValue() == currentDate.getMonthValue()) {
-                    amountAdder += i.getAmount();
-                }
-            }
-        }
-
-        return amountAdder;
+    // EFFECTS: returns total amount of expenses in category for current month
+    public double getAmountUsedThisMonth() {
+        return category.getAllItemAmountThisMonthTotal();
     }
 
-    // EFFECTS: returns amount of money left to spend in category to say in budget in this month
-    public double getAmountLeft(ArrayList<Item> allExpenseItems) {
-        return amount - getAmountUsedThisMonth(allExpenseItems);
+    // EFFECTS: returns amount of money left to spend in category to say in budget for current month
+    public double getAmountLeft() {
+        return amount - getAmountUsedThisMonth();
     }
 }

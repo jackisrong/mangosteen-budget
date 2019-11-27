@@ -8,23 +8,14 @@ public abstract class Item {
     protected LocalDate date;
     protected String note;
 
+    // MODIFIES: this
+    // EFFECTS: creates new Item with specified fields
     protected Item(double amount, Category category, LocalDate date, String note) {
         this.amount = amount;
         setCategory(category);
         this.date = date;
         this.note = note;
     }
-
-    // EFFECTS: checks if monetary amount given is valid
-    /*
-    private boolean checkMonetaryValidity(double a) throws NegativeMonetaryAmountException {
-        if (a < 0) {
-            throw new NegativeMonetaryAmountException();
-        }
-
-        return true;
-    }
-     */
 
     // MODIFIES: this
     // EFFECTS: reflexive relationship (one-to-many) - set category, then add this item into category's list of items
@@ -71,7 +62,8 @@ public abstract class Item {
 
     public void edit(double amount, Category category, LocalDate date, String note) {
         this.amount = amount;
-        this.category = category;
+        removeCategory(this.category);
+        setCategory(category);
         this.date = date;
         this.note = note;
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -46,6 +46,30 @@
             <Label fx:id="expensePieChartTitle" styleClass="sectionTitle" text="Expenses Summary for"/>
             <Label fx:id="expensePieChartNotice"/>
             <PieChart fx:id="expensePieChart" legendVisible="false" prefHeight="0"/>
+
+            <Separator/>
+
+            <Label fx:id="incomeLineChartTitle" styleClass="sectionTitle" text="Income Trends for"/>
+            <LineChart fx:id="incomeLineChart" legendVisible="false" prefHeight="0">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" label="Month"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" label="Amount ($)"/>
+                </yAxis>
+            </LineChart>
+
+            <Separator/>
+
+            <Label fx:id="expenseLineChartTitle" styleClass="sectionTitle" text="Income Trends for"/>
+            <LineChart fx:id="expenseLineChart" legendVisible="false" prefHeight="0">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" label="Month"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" label="Amount ($)"/>
+                </yAxis>
+            </LineChart>
 
             <Separator/>
 

@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SubBudgetTest {
+    private Category c;
     private SubBudget subBudget;
 
     @BeforeEach
     public void setup() {
-        subBudget = new SubBudget(new ExpenseCategory("Food"), 500);
+        c = new ExpenseCategory("Food");
+        subBudget = new SubBudget(c, 500);
     }
 
     @Test
@@ -33,38 +35,39 @@ public class SubBudgetTest {
 
     @Test
     public void getAmountUsedTest() {
-        assertEquals(0, subBudget.getAmountUsedThisMonth(null));
+        Category gift = new ExpenseCategory("Gift");
+        assertEquals(0, subBudget.getAmountUsedThisMonth());
 
-        ArrayList<Item> expenses = new ArrayList<Item>();
-        expenses.add(new ExpenseItem(0.51, new ExpenseCategory("Gift"), LocalDate.now(), ""));
-        assertEquals(0, subBudget.getAmountUsedThisMonth(expenses));
+        new ExpenseItem(0.51, gift, LocalDate.now(), "");
+        assertEquals(0, subBudget.getAmountUsedThisMonth());
 
-        expenses.add(new ExpenseItem(109.81, new ExpenseCategory("Food"), LocalDate.now(), ""));
-        assertEquals(109.81, subBudget.getAmountUsedThisMonth(expenses));
+        new ExpenseItem(109.81, c, LocalDate.now(), "");
+        assertEquals(109.81, subBudget.getAmountUsedThisMonth());
 
-        expenses.add(new ExpenseItem(203.09, new ExpenseCategory("Transportation"), LocalDate.now(), ""));
-        assertEquals(109.81, subBudget.getAmountUsedThisMonth(expenses));
+        new ExpenseItem(203.09, gift, LocalDate.now(), "");
+        assertEquals(109.81, subBudget.getAmountUsedThisMonth());
 
-        expenses.add(new ExpenseItem(6.98, new ExpenseCategory("Food"), LocalDate.now(), ""));
-        assertEquals(109.81 + 6.98, subBudget.getAmountUsedThisMonth(expenses));
+        new ExpenseItem(6.98, c, LocalDate.now(), "");
+        assertEquals(109.81 + 6.98, subBudget.getAmountUsedThisMonth());
     }
 
     @Test
     public void getAmountLeftTest() {
-        assertEquals(500, subBudget.getAmountLeft(null));
+        Category gift = new ExpenseCategory("Gift");
+        assertEquals(500, subBudget.getAmountLeft());
 
         ArrayList<Item> expenses = new ArrayList<Item>();
-        expenses.add(new ExpenseItem(0.51, new ExpenseCategory("Gift"), LocalDate.now(), ""));
-        assertEquals(500, subBudget.getAmountLeft(expenses));
+        expenses.add(new ExpenseItem(0.51, gift, LocalDate.now(), ""));
+        assertEquals(500, subBudget.getAmountLeft());
 
-        expenses.add(new ExpenseItem(109.81, new ExpenseCategory("Food"), LocalDate.now(), ""));
-        assertEquals(500 - 109.81, subBudget.getAmountLeft(expenses));
+        expenses.add(new ExpenseItem(109.81, c, LocalDate.now(), ""));
+        assertEquals(500 - 109.81, subBudget.getAmountLeft());
 
-        expenses.add(new ExpenseItem(203.09, new ExpenseCategory("Transportation"), LocalDate.now(), ""));
-        assertEquals(500 - 109.81, subBudget.getAmountLeft(expenses));
+        expenses.add(new ExpenseItem(203.09, gift, LocalDate.now(), ""));
+        assertEquals(500 - 109.81, subBudget.getAmountLeft());
 
-        expenses.add(new ExpenseItem(6.98, new ExpenseCategory("Food"), LocalDate.now(), ""));
-        assertEquals(500 - 109.81 - 6.98, subBudget.getAmountLeft(expenses));
+        expenses.add(new ExpenseItem(6.98, c, LocalDate.now(), ""));
+        assertEquals(500 - 109.81 - 6.98, subBudget.getAmountLeft());
     }
 
     @Test

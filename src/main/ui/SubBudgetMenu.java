@@ -10,7 +10,9 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import model.*;
+import model.Budget;
+import model.Category;
+import model.SubBudget;
 
 import java.io.IOException;
 
@@ -24,12 +26,15 @@ public class SubBudgetMenu extends Menu {
     @FXML
     private VBox contentContainer;
 
+    // MODIFIES: this
+    // EFFECTS: create new SubBudgetMenu with specified fields
     public SubBudgetMenu(MainMenu mainMenu, Budget budget) {
         this.mainMenu = mainMenu;
         this.budget = budget;
         budgetMakerMenu = new BudgetMakerMenu(this, budget);
     }
 
+    // EFFECTS: do run actions and load GUI
     public void run(Stage stage) {
         this.stage = stage;
         try {
@@ -67,13 +72,13 @@ public class SubBudgetMenu extends Menu {
         title.getStyleClass().add("budgetTitle");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        Label amountLeft = new Label(formatMonetaryAmount(s.getAmountLeft(budget.getAllExpenseItems())) + " left");
+        Label amountLeft = new Label(formatMonetaryAmount(s.getAmountLeft()) + " left");
         amountLeft.getStyleClass().add("budgetAmountLeft");
         return new HBox(title, spacer, amountLeft);
     }
 
     private StackPane createBudgetLineProgress(SubBudget s) {
-        double used = s.getAmountUsedThisMonth(budget.getAllExpenseItems());
+        double used = s.getAmountUsedThisMonth();
         ProgressBar progressBar;
         if (used / s.getAmount() >= 1.0) {
             progressBar = new ProgressBar(1);
@@ -132,41 +137,4 @@ public class SubBudgetMenu extends Menu {
     private void viewSpending() {
         mainMenu.viewSpending();
     }
-
-
-
-    /*
-    public void createSubBudget() {
-        System.out.println("Which category would you like to create a sub-budget for?");
-        String categoryKey = scanner.nextLine();
-        System.out.println("What amount would you like to set the budget for?");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
-        Category category = budget.getExpenseCategories().get(categoryKey);
-        budget.addToAllSubBudgets(new SubBudget(category, amount));
-    }
-
-    public void viewSubBudgets() {
-        for (SubBudget b : budget.getAllSubBudgets()) {
-            System.out.println("Sub-budget for " + b.getCategoryName() + " has used "
-                    + b.getAmountUsedThisMonth(budget.getAllExpenseItems(), LocalDate.now()) + " of " + b.getAmount()
-                    + " (" + b.getAmountLeft(budget.getAllExpenseItems(), LocalDate.now()) + " left in sub-budget)");
-        }
-    }
-
-    public void changeSubBudgetAmount() {
-        viewSubBudgets();
-        System.out.println("Which category's sub-budget would you like to edit?");
-        String category = scanner.nextLine();
-        for (SubBudget s : budget.getAllSubBudgets()) {
-            if (s.getCategory().equals(category)) {
-                System.out.println("Enter new amount for sub-budget:");
-                double newAmount = scanner.nextDouble();
-                scanner.nextLine();
-                s.changeAmount(newAmount);
-                break;
-            }
-        }
-    }
-     */
 }

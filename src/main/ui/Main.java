@@ -6,12 +6,14 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private MainMenu mainMenu = new MainMenu();
 
+    // EFFECTS: start GUI
     public static void main(String[] args) {
         System.out.println("Loading GUI stage...");
         Application.launch(args);
     }
 
     @Override
+    // EFFECTS: create GUI stage, run main menu
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Guava");
         primaryStage.setWidth(411 * (4.0 / 5.0));
@@ -25,6 +27,7 @@ public class Main extends Application {
     }
 
     @Override
+    // EFFECTS: save information
     public void stop() {
         mainMenu.save();
         System.out.println("Thank you for using Guava.");

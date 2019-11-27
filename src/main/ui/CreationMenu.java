@@ -2,19 +2,15 @@ package ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import model.Category;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public abstract class CreationMenu extends Menu {
     protected Boolean editing = false;
@@ -31,6 +27,7 @@ public abstract class CreationMenu extends Menu {
     protected Label amountLabel;
 
     @FXML
+    // EFFECTS: load all categories into buttons from allCategories list
     protected void loadCategories(Collection<Category> allCategories) {
         categoriesContainer.getChildren().clear();
         allCategoryButtons.clear();
@@ -45,6 +42,7 @@ public abstract class CreationMenu extends Menu {
     }
 
     @FXML
+    // EFFECTS: set button style and category label on category button press
     protected void choseCategory(ActionEvent event) {
         Button b = (Button) event.getSource();
         chosenCategory.setText("Category: " + b.getText());
@@ -74,6 +72,7 @@ public abstract class CreationMenu extends Menu {
     }
 
     @FXML
+    // EFFECTS: do appropriate action when a number pad button is pressed
     protected void amountNumberPadPressed(ActionEvent event) {
         Button b = (Button) event.getSource();
         String currentAmountNoSymbols = getCurrentAmountWithoutSymbols();
@@ -93,6 +92,7 @@ public abstract class CreationMenu extends Menu {
         }
     }
 
+    // EFFECTS: check if entered amount is greater than 0
     protected boolean checkAmountGreaterThanZero() {
         return !amountLabel.getText().equals("$0.00");
     }

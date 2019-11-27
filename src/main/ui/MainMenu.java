@@ -3,7 +3,9 @@ package ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -13,6 +15,7 @@ import network.Quote;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,15 +48,27 @@ public class MainMenu extends Menu {
     private PieChart expensePieChart;
     @FXML
     private Label expensePieChartNotice;
+    @FXML
+    private Label incomeLineChartTitle;
+    @FXML
+    private LineChart incomeLineChart;
+    @FXML
+    private Label expenseLineChartTitle;
+    @FXML
+    private LineChart expenseLineChart;
 
+    // EFFECTS: create new MainMenu and load existing data
     public MainMenu() {
         budget.loadAllExistingData();
     }
 
+    // EFFECTS: do run actions, load GUI and main menu charts
     public void run(Stage stage) {
         this.stage = stage;
         try {
             loadGUI();
+            summaryMonthPieCharts();
+            summaryYearBarCharts();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("IOException occurred while initializing main menu GUI.");
@@ -77,7 +92,6 @@ public class MainMenu extends Menu {
         displayRandomQuote();
         summaryMonthNumbers(getCurrentMonth(), getCurrentYear(), summaryTitle, incomeAmount, expenseAmount,
                 balanceAmount);
-        summaryMonthPieCharts();
     }
 
     private void displayRandomQuote() {
@@ -98,7 +112,7 @@ public class MainMenu extends Menu {
                     String percentage = df.format(c.getAllItemAmountThisMonthTotal() / allItemsAmountThisMonth * 100);
                     String label = c.getName() + "\n" + formatMonetaryAmount(c.getAllItemAmountThisMonthTotal())
                             + " (" + percentage + "%)";
-                    PieChart.Data data = new PieChart.Data(label, c.getAllItemAmountThisMonthTotal());
+                    PieChart.Data data = new PieChart.Data(label, Integer.parseInt(percentage));
                     chart.getData().add(data);
                 }
             }
@@ -114,22 +128,42 @@ public class MainMenu extends Menu {
                 expensePieChart);
     }
 
+    private void drawLineChart(LineChart chart, ArrayList<Item> items) {
+        XYChart.Series data = new XYChart.Series();
+        data.setName(Integer.toString(getCurrentYear()));
+        for (Month m : Month.values()) {
+            data.getData().add(new XYChart.Data(m + "", getTotalItemAmounts(m, getCurrentYear(), items)));
+        }
+        chart.getData().add(data);
+    }
+
+    private void summaryYearBarCharts() {
+        incomeLineChartTitle.setText("Income Trends for " + getCurrentYear());
+        expenseLineChartTitle.setText("Expense Trends for " + getCurrentYear());
+        drawLineChart(incomeLineChart, budget.getAllIncomeItems());
+        drawLineChart(expenseLineChart, budget.getAllExpenseItems());
+    }
+
     @FXML
+    // EFFECTS: run itemMenu to add new item
     public void addItem() {
         itemMenu.run(stage, this);
     }
 
     @FXML
+    // EFFECTS: run spendingMenu to view Spending tab
     public void viewSpending() {
         spendingMenu.run(stage);
     }
 
     @FXML
+    // EFFECTS: run subBudgetMenu to view Budget tab
     public void viewBudgets() {
         subBudgetMenu.run(stage);
     }
 
     @FXML
+    // EFFECTS: save existing data
     public void save() {
         budget.saveAllExistingData();
     }

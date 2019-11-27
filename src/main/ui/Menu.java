@@ -18,19 +18,23 @@ public abstract class Menu {
 
     protected abstract void run(Stage stage);
 
+    // EFFECTS: return current year
     protected int getCurrentYear() {
         return LocalDate.now().getYear();
     }
 
+    // EFFECTS: return current month
     protected Month getCurrentMonth() {
         return LocalDate.now().getMonth();
     }
 
+    // EFFECTS: format a double into monetary String
     protected String formatMonetaryAmount(double amount) {
         DecimalFormat df = new DecimalFormat("#0.00");
         return "$" + df.format(amount);
     }
 
+    // EFFECTS: get total amount of items within list items in month month and year year
     protected double getTotalItemAmounts(Month month, int year, ArrayList<Item> items) {
         double total = 0.0;
         for (Item i : items) {
@@ -41,6 +45,7 @@ public abstract class Menu {
         return total;
     }
 
+    // EFFECTS: show monthly summary module
     protected void summaryMonthNumbers(Month month, int year, Label summaryTitle, Label incomeAmount,
                                        Label expenseAmount, Label balanceAmount) {
         double totalMonthlyIncome = getTotalItemAmounts(month, year, budget.getAllIncomeItems());

@@ -22,6 +22,8 @@ public class ItemMenu extends CreationMenu {
     @FXML
     private DatePicker datePicker;
 
+    // MODIFIES: this
+    // EFFECTS: creates new ItemMenu with specified fields
     public ItemMenu(Budget budget) {
         this.budget = budget;
     }
@@ -31,6 +33,7 @@ public class ItemMenu extends CreationMenu {
         // do nothing
     }
 
+    // EFFECTS: do run actions and load GUI
     public void run(Stage stage, Menu previousMenu) {
         this.stage = stage;
         this.previousMenu = previousMenu;
@@ -43,14 +46,14 @@ public class ItemMenu extends CreationMenu {
         }
     }
 
-    public void runEditItem(Stage stage, Item i, int positionOfItemInAppropriateList, Menu previousMenu) {
+    // EFFECTS: do run actions, set appropriate settings for editing chosen item
+    public void runEditItem(Stage stage, String type, int positionOfItemInAppropriateList, Menu previousMenu) {
         run(stage, previousMenu);
         editing = true;
-        if (i.getClass().getName().equals("model.IncomeItem")) {
-            chooseItemType("Income");
-        } else {
-            chooseItemType("Expense");
-        }
+        chooseItemType(type);
+        itemTypeChoice.setDisable(true);
+        Item i = type.equals("Income") ? budget.getAllIncomeItems().get(positionOfItemInAppropriateList) :
+                budget.getAllExpenseItems().get(positionOfItemInAppropriateList);
         for (Button b : allCategoryButtons) {
             if (b.getText().equals(i.getCategoryName())) {
                 choseCategory(new ActionEvent(b, b));
@@ -165,11 +168,15 @@ public class ItemMenu extends CreationMenu {
         alert.setContentText("The amount is $0.00 so the item will be deleted. Continue?");
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
-            if (itemTypeChoice.getSelectionModel().getSelectedItem().equals("Income")) {
+            Item i = type.equals("Income") ? budget.getAllIncomeItems().get(positionOfEditItemInAppropriateList) :
+                    budget.getAllExpenseItems().get(positionOfEditItemInAppropriateList);
+            i.removeCategory(i.getCategory());
+            if (type.equals("Income")) {
                 budget.getAllIncomeItems().remove(positionOfEditItemInAppropriateList);
             } else {
                 budget.getAllExpenseItems().remove(positionOfEditItemInAppropriateList);
             }
+            backToPreviousMenu();
         } else {
             alert.close();
         }

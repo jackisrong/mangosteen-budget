@@ -11,7 +11,9 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import model.*;
+import model.Budget;
+import model.Category;
+import model.Item;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,12 +49,15 @@ public class SpendingMenu extends Menu {
     @FXML
     private VBox transactionsContainer;
 
+    // MODIFIES: this
+    // EFFECTS: create new SpendingMenu with specified fields
     public SpendingMenu(MainMenu mainMenu, ItemMenu itemMenu, Budget budget) {
         this.mainMenu = mainMenu;
         this.itemMenu = itemMenu;
         this.budget = budget;
     }
 
+    // EFFECTS: do run actions and load GUI
     public void run(Stage stage) {
         this.stage = stage;
         try {
@@ -212,15 +217,15 @@ public class SpendingMenu extends Menu {
         double amount = Double.parseDouble(amountLabel.getText().substring(2));
         LocalDate date = LocalDate.of(year, month, day);
         int positionOfItemInAppropriateList = Integer.parseInt(((Label) hbox.getChildren().get(4)).getText());
-        Item i;
+        String type;
         if (amountLabel.getText().charAt(0) == '+') {
             Category c = budget.getIncomeCategories().get(((Label) categoryNoteBox.getChildren().get(0)).getText());
-            i = new IncomeItem(amount, c, date, note);
+            type = "Income";
         } else {
             Category c = budget.getExpenseCategories().get(((Label) categoryNoteBox.getChildren().get(0)).getText());
-            i = new ExpenseItem(amount, c, date, note);
+            type = "Expense";
         }
-        itemMenu.runEditItem(stage, i, positionOfItemInAppropriateList, this);
+        itemMenu.runEditItem(stage, type, positionOfItemInAppropriateList, this);
     }
 
     @FXML
