@@ -15,7 +15,7 @@ public class Main extends Application {
     @Override
     // EFFECTS: create GUI stage, run main menu
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Guava");
+        primaryStage.setTitle("Mangosteen Budget");
         primaryStage.setWidth(411 * (4.0 / 5.0));
         primaryStage.setHeight(731 * (4.0 / 5.0));
         primaryStage.setResizable(false);
@@ -30,6 +30,6 @@ public class Main extends Application {
     // EFFECTS: save information
     public void stop() {
         mainMenu.save();
-        System.out.println("Thank you for using Guava.");
+        System.out.println("Thank you for using Mangosteen Budget.");
     }
 }
